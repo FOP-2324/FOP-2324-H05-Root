@@ -16,7 +16,6 @@ public class MainboardImpl extends ComponentImpl implements Mainboard{
         this.peripherals = new Peripheral[peripheralSlots];
     }
 
-    @Override
     public boolean addCpu(Cpu cpu) {
         if(cpu != null && this.cpu == null && cpu.getSocket() == socket){
             this.cpu = cpu;
@@ -26,7 +25,6 @@ public class MainboardImpl extends ComponentImpl implements Mainboard{
     }
 
 
-    @Override
     public boolean addMemory(Memory memory) {
         if(memory != null && nextMemorySlot < memories.length){
             memories[nextMemorySlot] = memory;
@@ -36,7 +34,6 @@ public class MainboardImpl extends ComponentImpl implements Mainboard{
         return false;
     }
 
-    @Override
     public boolean addPeripheral(Peripheral peripheral) {
         if(peripheral != null && nextPeripheralSlot < peripherals.length){
             peripherals[nextPeripheralSlot] = peripheral;
