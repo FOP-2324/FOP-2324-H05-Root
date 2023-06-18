@@ -12,9 +12,9 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        Mainboard desktop = new MainboardImpl(Socket.AM4, 2, 2, 100);
-        desktop.addCpu(new CpuImpl(Socket.AM4, 10, 3.3e9, 300));
-        desktop.addMemory(new MemoryImpl((char) 8, 60));
+        Mainboard desktop = new Mainboard(Socket.AM4, 2, 2, 100);
+        desktop.addCpu(new Cpu(Socket.AM4, 10, 3.3e9, 300));
+        desktop.addMemory(new Memory((char) 8, 60));
         //desktop.addPeripheral(new PeripheralImpl(PeripheralType.GPU, 300));
 
         TotalCostRater totalCostRater = new TotalCostRater();

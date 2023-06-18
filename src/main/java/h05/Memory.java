@@ -1,5 +1,15 @@
 package h05;
 
-public interface Memory extends Component{
-    char getCapacity();
+public class Memory extends ComponentImpl{
+
+    private final char capacity;
+
+    public Memory(char capacity, double price) {
+        super(price);
+        this.capacity = capacity;
+    }
+
+    public char getCapacity() {
+        return capacity;
+    }
 }
