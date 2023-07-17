@@ -1,5 +1,8 @@
 package h05;
 
+/**
+ * {@link ComponentRater} which rates the system in respect to the price
+ */
 public class TotalCostRater implements ComponentRater{
 
     private double cost = 0.0f;
@@ -24,6 +27,10 @@ public class TotalCostRater implements ComponentRater{
         cost += peripheral.getPrice();
     }
 
+    /**
+     *
+     * @return the total cost of the system
+     */
     public double getTotalCost(){
         return cost;
     }
