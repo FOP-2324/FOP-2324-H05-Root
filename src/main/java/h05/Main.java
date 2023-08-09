@@ -22,9 +22,9 @@ public class Main {
         System.out.println("Price: " + totalCostRater.getTotalCost());
 
 
-        MinecraftRater minecraftRater = new MinecraftRater();
-        desktop.rateBy(minecraftRater);
-        System.out.println("Minecraft supported: " + minecraftRater.isPlayable());
+        MachineLearningRater machineLearningRater = new MachineLearningRater();
+        desktop.rateBy(machineLearningRater);
+        System.out.println("Minecraft supported: " + machineLearningRater.isPlayable());
 
         ServerCenter serverCenter = new ServerCenter();
         serverCenter.addMainboard(desktop);

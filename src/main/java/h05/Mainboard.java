@@ -15,15 +15,15 @@ public class Mainboard extends ComponentImpl implements Component, Rateable {
     /**
      * Constructs a new Mainboard with given parameters
      * @param socket actual cpu socket
-     * @param memorySlots max number of allowed memories
-     * @param peripheralSlots max number of allowed peripheral
+     * @param numberOfMemorySlots max number of allowed memories
+     * @param numberOfPeripheralSlots max number of allowed peripheral
      * @param price price of mainboard
      */
-    public Mainboard(Socket socket, int memorySlots, int peripheralSlots, double price){
+    public Mainboard(Socket socket, int numberOfMemorySlots, int numberOfPeripheralSlots, double price){
         super(price);
         this.socket = socket;
-        this.memories = new Memory[memorySlots];
-        this.peripherals = new Peripheral[peripheralSlots];
+        this.memories = new Memory[numberOfMemorySlots];
+        this.peripherals = new Peripheral[numberOfPeripheralSlots];
     }
 
     /**
