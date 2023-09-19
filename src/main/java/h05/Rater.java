@@ -1,9 +1,11 @@
 package h05;
 
+import h05.model.*;
+
 /**
  * Rate different Components
  */
-public interface ComponentRater {
+public interface Rater {
 
     /**
      * Consumes a given mainboard
@@ -15,7 +17,7 @@ public interface ComponentRater {
      * Consume a given cpu
      * @param cpu cpu which gets rated
      */
-    void consumeCpu(Cpu cpu);
+    void consumeCpu(CPU cpu);
 
     /**
      * Consume a given memory

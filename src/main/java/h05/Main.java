@@ -1,5 +1,7 @@
 package h05;
 
+import h05.model.*;
+
 /**
  * Main entry point in executing the program.
  */
@@ -12,9 +14,13 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        Mainboard desktop = new Mainboard(Socket.AM4, 2, 2, 100);
-        desktop.addCpu(new Cpu(Socket.AM4, 10, 3.3e9, 300));
-        desktop.addMemory(new Memory((char) 8, 60));
+        MainboardImpl desktop = new MainboardImpl(Socket.AM4, 2, 2, 100);
+        desktop.addCpu(new CPUImpl(Socket.AM4, 10, 3.3e9, 300));
+        desktop.addMemory(new MemoryImpl((char) 8, 60));
+        VirtualMemory vmem = new VirtualMemory(0.5);
+        desktop.addMemory(vmem);
+
+        //vmem.setCapacity((char) 30);
         //desktop.addPeripheral(new PeripheralImpl(PeripheralType.GPU, 300));
 
         TotalCostRater totalCostRater = new TotalCostRater();
@@ -24,7 +30,7 @@ public class Main {
 
         MachineLearningRater machineLearningRater = new MachineLearningRater();
         desktop.rateBy(machineLearningRater);
-        System.out.println("Minecraft supported: " + machineLearningRater.isPlayable());
+        System.out.println("Model speed: " + machineLearningRater.checkModel(3));
 
         ServerCenter serverCenter = new ServerCenter();
         serverCenter.addMainboard(desktop);

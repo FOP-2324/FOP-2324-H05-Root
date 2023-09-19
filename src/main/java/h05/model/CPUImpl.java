@@ -1,9 +1,9 @@
-package h05;
+package h05.model;
 
 /**
  * Representing a processor
  */
-public class Cpu extends ComponentImpl{
+public class CPUImpl extends ComponentImpl implements CPU{
 
     private final Socket socket;
     private final int numOfCores;
@@ -16,33 +16,24 @@ public class Cpu extends ComponentImpl{
      * @param frequency Clock frequency in Hertz
      * @param price price of the processor
      */
-    public Cpu(Socket socket, int numOfCores, double frequency, double price) {
+    public CPUImpl(Socket socket, int numOfCores, double frequency, double price) {
         super(price);
         this.socket = socket;
         this.numOfCores = numOfCores;
         this.frequency = frequency;
     }
 
-    /**
-     *
-     * @return the socket of the processor
-     */
+    @Override
     public Socket getSocket() {
         return socket;
     }
 
-    /**
-     *
-     * @return the number of cores inside the processor
-     */
+    @Override
     public int getCores() {
         return numOfCores;
     }
 
-    /**
-     *
-     * @return the frequency of the cpu in Hertz
-     */
+    @Override
     public double getFrequency() {
         return frequency;
     }

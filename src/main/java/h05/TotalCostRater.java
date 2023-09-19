@@ -1,9 +1,11 @@
 package h05;
 
+import h05.model.*;
+
 /**
- * {@link ComponentRater} which rates the system in respect to the price
+ * {@link Rater} which rates the system in respect to the price
  */
-public class TotalCostRater implements ComponentRater{
+public class TotalCostRater implements Rater {
 
     private double cost = 0.0f;
 
@@ -13,7 +15,7 @@ public class TotalCostRater implements ComponentRater{
     }
 
     @Override
-    public void consumeCpu(Cpu cpu) {
+    public void consumeCpu(CPU cpu) {
         cost += cpu.getPrice();
     }
 

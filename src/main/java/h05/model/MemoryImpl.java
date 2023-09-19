@@ -1,9 +1,9 @@
-package h05;
+package h05.model;
 
 /**
  * Representing Random Access Memory of a system
  */
-public class Memory extends ComponentImpl{
+public class MemoryImpl extends ComponentImpl implements Memory{
 
     private final char capacity;
 
@@ -12,15 +12,12 @@ public class Memory extends ComponentImpl{
      * @param capacity Capacity of the memory in Gigabyte
      * @param price Price of the memory
      */
-    public Memory(char capacity, double price) {
+    public MemoryImpl(char capacity, double price) {
         super(price);
         this.capacity = capacity;
     }
 
-    /**
-     *
-     * @return the capacity in gigabyte
-     */
+    @Override
     public char getCapacity() {
         return capacity;
     }

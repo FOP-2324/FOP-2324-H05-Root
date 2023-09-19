@@ -1,25 +1,28 @@
 package h05;
 
+import h05.model.MainboardImpl;
+import h05.model.Configuration;
+
 import java.util.ArrayList;
 
 /**
  * Representing a system which consists of multiple subsystems
  */
-public class ServerCenter implements Rateable {
+public class ServerCenter implements Configuration {
 
-    ArrayList<Mainboard> mainboards = new ArrayList<>();
+    ArrayList<MainboardImpl> mainboards = new ArrayList<>();
 
     /**
-     * Adds a {@link Mainboard} to the server center
-     * @param mainboard specific {@link Mainboard} which gets included
+     * Adds a {@link MainboardImpl} to the server center
+     * @param mainboard specific {@link MainboardImpl} which gets included
      */
-    void addMainboard(Mainboard mainboard){
+    void addMainboard(MainboardImpl mainboard){
         mainboards.add(mainboard);
     }
 
     @Override
-    public void rateBy(ComponentRater rater) {
-        for(Mainboard mainboard : mainboards){
+    public void rateBy(Rater rater) {
+        for(MainboardImpl mainboard : mainboards){
             mainboard.rateBy(rater);
         }
     }

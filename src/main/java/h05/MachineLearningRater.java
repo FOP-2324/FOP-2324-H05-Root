@@ -1,9 +1,11 @@
 package h05;
 
+import h05.model.*;
+
 /**
  * Classifies the system supports playing Minecraft
  */
-public class MachineLearningRater implements ComponentRater{
+public class MachineLearningRater implements Rater {
 
     private int tpuCount = 0;
     private int memorySize = 0;
@@ -14,7 +16,7 @@ public class MachineLearningRater implements ComponentRater{
     }
 
     @Override
-    public void consumeCpu(Cpu cpu) {
+    public void consumeCpu(CPU cpu) {
 
     }
 

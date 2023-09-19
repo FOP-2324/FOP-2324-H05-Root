@@ -1,4 +1,4 @@
-package h05;
+package h05.model;
 
 /**
  * Class representing a part of an assembly

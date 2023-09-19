@@ -1,12 +1,14 @@
-package h05;
+package h05.model;
+
+import h05.Rater;
 
 /**
  * Represents a mainboard of a system, which combines all other components
  */
-public class Mainboard extends ComponentImpl implements Component, Rateable {
+public class MainboardImpl extends ComponentImpl implements Mainboard {
 
     private final Socket socket;
-    private Cpu cpu = null;
+    private CPU cpu = null;
     private final Memory[] memories;
     private int nextMemorySlot = 0;
     private final Peripheral[] peripherals;
@@ -19,7 +21,7 @@ public class Mainboard extends ComponentImpl implements Component, Rateable {
      * @param numberOfPeripheralSlots max number of allowed peripheral
      * @param price price of mainboard
      */
-    public Mainboard(Socket socket, int numberOfMemorySlots, int numberOfPeripheralSlots, double price){
+    public MainboardImpl(Socket socket, int numberOfMemorySlots, int numberOfPeripheralSlots, double price){
         super(price);
         this.socket = socket;
         this.memories = new Memory[numberOfMemorySlots];
@@ -31,7 +33,7 @@ public class Mainboard extends ComponentImpl implements Component, Rateable {
      * @param cpu cpu, which gets added in the system
      * @return true if operation was successful, otherwise false
      */
-    public boolean addCpu(Cpu cpu) {
+    public boolean addCpu(CPU cpu) {
         if(cpu != null && this.cpu == null && cpu.getSocket() == socket){
             this.cpu = cpu;
             return true;
@@ -68,7 +70,7 @@ public class Mainboard extends ComponentImpl implements Component, Rateable {
     }
 
     @Override
-    public void rateBy(ComponentRater rater) {
+    public void rateBy(Rater rater) {
         rater.consumeMainboard(this);
 
         if(cpu != null) {

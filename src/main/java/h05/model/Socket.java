@@ -1,4 +1,4 @@
-package h05;
+package h05.model;
 
 /**
  * Socket of Processor
