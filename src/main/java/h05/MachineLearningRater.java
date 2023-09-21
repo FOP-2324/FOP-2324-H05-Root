@@ -5,7 +5,7 @@ import h05.model.*;
 /**
  * Classifies the system supports playing Minecraft
  */
-public class MachineLearningRater implements Rater {
+public class MachineLearningRater implements ComponentRater {
 
     private int tpuCount = 0;
     private int memorySize = 0;

@@ -1,6 +1,6 @@
 package h05.model;
 
-import h05.Rater;
+import h05.ComponentRater;
 
 /**
  * Interface to allow rating a system
@@ -8,8 +8,8 @@ import h05.Rater;
 public interface Configuration {
 
     /**
-     * Rates the system given a specific {@link Rater}
-     * @param rater specific {@link  Rater}
+     * Rates the system given a specific {@link ComponentRater}
+     * @param rater specific {@link  ComponentRater}
      */
-    void rateBy(Rater rater);
+    void rateBy(ComponentRater rater);
 }

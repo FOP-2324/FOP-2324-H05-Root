@@ -3,9 +3,9 @@ package h05;
 import h05.model.*;
 
 /**
- * {@link Rater} which rates the system in respect to the price
+ * {@link ComponentRater} which rates the system in respect to the price
  */
-public class TotalCostRater implements Rater {
+public class TotalCostRater implements ComponentRater {
 
     private double cost = 0.0f;
 

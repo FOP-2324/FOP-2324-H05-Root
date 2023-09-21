@@ -5,7 +5,7 @@ import h05.model.*;
 /**
  * Rate different Components
  */
-public interface Rater {
+public interface ComponentRater {
 
     /**
      * Consumes a given mainboard

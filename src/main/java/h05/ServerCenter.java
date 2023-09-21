@@ -21,7 +21,7 @@ public class ServerCenter implements Configuration {
     }
 
     @Override
-    public void rateBy(Rater rater) {
+    public void rateBy(ComponentRater rater) {
         for(MainboardImpl mainboard : mainboards){
             mainboard.rateBy(rater);
         }

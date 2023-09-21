@@ -1,6 +1,6 @@
 package h05.model;
 
-import h05.Rater;
+import h05.ComponentRater;
 
 /**
  * Represents a mainboard of a system, which combines all other components
@@ -70,7 +70,7 @@ public class MainboardImpl extends PurchasedComponent implements Mainboard {
     }
 
     @Override
-    public void rateBy(Rater rater) {
+    public void rateBy(ComponentRater rater) {
         rater.consumeMainboard(this);
 
         if(cpu != null) {
