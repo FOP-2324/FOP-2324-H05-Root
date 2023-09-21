@@ -5,7 +5,7 @@ import h05.Rater;
 /**
  * Represents a mainboard of a system, which combines all other components
  */
-public class MainboardImpl extends ComponentImpl implements Mainboard {
+public class MainboardImpl extends PurchasedComponent implements Mainboard {
 
     private final Socket socket;
     private CPU cpu = null;

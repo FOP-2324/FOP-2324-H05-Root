@@ -3,7 +3,7 @@ package h05.model;
 /**
  * Representing a processor
  */
-public class CPUImpl extends ComponentImpl implements CPU{
+public class CPUImpl extends PurchasedComponent implements CPU{
 
     private final Socket socket;
     private final int numOfCores;

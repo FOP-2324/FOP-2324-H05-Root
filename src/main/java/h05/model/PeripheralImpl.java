@@ -3,7 +3,7 @@ package h05.model;
 /**
  * Representing a peripheral of a system
  */
-public class PeripheralImpl extends ComponentImpl implements Peripheral{
+public class PeripheralImpl extends PurchasedComponent implements Peripheral{
 
             private final PeripheralType peripheralType;
 

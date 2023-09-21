@@ -3,7 +3,7 @@ package h05.model;
 /**
  * Representing Random Access Memory of a system
  */
-public class MemoryImpl extends ComponentImpl implements Memory{
+public class MemoryImpl extends PurchasedComponent implements Memory{
 
     private final char capacity;
 

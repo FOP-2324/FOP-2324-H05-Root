@@ -3,7 +3,7 @@ package h05.model;
 /**
  * Abstract Implementation of a Component
  */
-public abstract class ComponentImpl implements Component{
+public abstract class PurchasedComponent implements Component{
 
     private final double price;
 
@@ -11,7 +11,7 @@ public abstract class ComponentImpl implements Component{
      * Construct a new component with given price
      * @param price actual price of component
      */
-    public ComponentImpl(double price){
+    public PurchasedComponent(double price){
         this.price = price;
     }
 
