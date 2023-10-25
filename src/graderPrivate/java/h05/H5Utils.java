@@ -23,6 +23,21 @@ public class H5Utils {
         Modifier.FINAL, Modifier.INTERFACE, Modifier.ABSTRACT, Modifier.ENUM
     };
 
+    public static void assertCorrectSuperclass(
+        TypeLink type,
+        TypeLink superclass
+    ) {
+        var typeString = BasicEnvironment.getInstance().getStringifier().stringify(type);
+        var superclassString = BasicEnvironment.getInstance().getStringifier().stringify(superclass);
+
+        Assertions2.assertEquals(
+            toStringifiable(superclass),
+            toStringifiable(type.superType()),
+            Assertions2.emptyContext(),
+            (r) -> "`%s` should extend `%s`.".formatted(typeString, superclassString)
+        );
+    }
+
     public static void assertCorrectInterfaces(
         TypeLink type,
         TypeLink... interfaces

@@ -4,10 +4,16 @@ import h05.h1.H1_1;
 import h05.h1.H1_2;
 import h05.h1.H1_3;
 import h05.h1.H1_4;
+import h05.h1.H1_5;
+import h05.h1.H1_6;
+import h05.h2.H2;
+import h05.model.Socket;
 import org.sourcegrade.jagr.api.rubric.Criterion;
 import org.sourcegrade.jagr.api.rubric.JUnitTestRef;
 import org.sourcegrade.jagr.api.rubric.Rubric;
 import org.sourcegrade.jagr.api.rubric.RubricProvider;
+
+import java.util.List;
 
 import static org.tudalgo.algoutils.tutor.general.jagr.RubricUtils.criterion;
 
@@ -20,46 +26,89 @@ public class H05_RubricProvider implements RubricProvider {
                 .shortDescription("H1 | Komponenten Modellierung")
                 .addChildCriteria(
                     Criterion.builder()
-                        .shortDescription("H1.1 | Interface Component")
+                        .shortDescription("H1.1 | Interface `Component`")
                         .addChildCriteria(
-                            criterion("Das Interface ist korrekt.",
+                            criterion("Das Interface `Component` ist korrekt.",
                                 JUnitTestRef.ofMethod(() -> H1_1.class.getDeclaredMethod("testInterface")))
                         ).build(),
                     Criterion.builder()
                         .shortDescription("H1.2 | Enumerationen")
                         .addChildCriteria(
-                            criterion("Enum Socket ist korrekt.",
+                            criterion("Enum `Socket` ist korrekt.",
                                 JUnitTestRef.ofMethod(() -> H1_2.class.getDeclaredMethod("testSocketEnum"))),
-                            criterion("Enum PeripheralType ist korrekt.",
+                            criterion("Enum `PeripheralType` ist korrekt.",
                                 JUnitTestRef.ofMethod(() -> H1_2.class.getDeclaredMethod("testPeripheralTypeEnum")))
                         ).build(),
                     Criterion.builder()
-                        .shortDescription("H1.3 | CPU modellieren")
+                        .shortDescription("H1.3 | `CPU` modellieren")
                         .addChildCriteria(
-                            criterion("Interface CPU ist korrekt und wird in CPUImpl verwendet.",
+                            criterion("Interface `CPU` ist korrekt und wird in `CPUImpl` verwendet.",
                                 JUnitTestRef.ofMethod(() -> H1_3.class.getDeclaredMethod("testCPUInterface"))),
-                            criterion("Konstruktor von CPUImpl ist korrekt.",
+                            criterion("Konstruktor von `CPUImpl` ist korrekt.",
                                 JUnitTestRef.ofMethod(() -> H1_3.class.getDeclaredMethod("testCPUImplConstructor"))),
-                            criterion("Objektkonstanten von CPUImpl sind korrekt.",
+                            criterion("Objektkonstanten von `CPUImpl` sind korrekt.",
                                 JUnitTestRef.ofMethod(() -> H1_3.class.getDeclaredMethod("testCPUImplFields"))),
-                            criterion("Methoden von CPU sind korrekt in CPUImpl implementiert.",
+                            criterion("Methoden von `CPU` sind korrekt in `CPUImpl` implementiert.",
                                 JUnitTestRef.ofMethod(() -> H1_3.class.getDeclaredMethod("testGetMethods")))
                         ).build(),
                     Criterion.builder()
-                        .shortDescription("H1.3 | Memory modellieren")
+                        .shortDescription("H1.4 | `Memory` modellieren")
                         .addChildCriteria(
-                            criterion("Interface Memory ist korrekt und wird in MemoryImpl verwendet.",
+                            criterion("Interface `Memory` ist korrekt und wird in `MemoryImpl` verwendet.",
                                 JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testMemoryInterface"))),
-                            criterion("Konstruktor und Objektkonstanten von MemoryImpl sind korrekt und methoden von Memory sind korrekt in MemoryImpl implementiert.",
+                            criterion("Konstruktor und Objektkonstanten von `MemoryImpl` sind korrekt und Methoden von `Memory` sind korrekt in `MemoryImpl` implementiert.",
                                 JUnitTestRef.and(
                                     JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testMemoryImplConstructor")),
                                     JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testMemoryImplFields")),
                                     JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testGetCapacity"))
                                 )
                             )
+                        ).build(),
+                    Criterion.builder()
+                        .shortDescription("H1.5 | `Peripheral` modellieren")
+                        .addChildCriteria(
+                            criterion("Interface `Peripheral` ist korrekt und wird in `PeripheralImpl` verwendet.",
+                                JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testPeripheralInterface"))),
+                            criterion("Konstruktor und Objektkonstanten von `PeripheralImpl` sind korrekt und Methoden von `Peripheral` sind korrekt in `PeripheralImpl` implementiert.",
+                                JUnitTestRef.and(
+                                    JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testPeripheralImplConstructor")),
+                                    JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testPeripheralImplFields")),
+                                    JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testGetPeripheralType"))
+                                )
+                            )
+                        ).build(),
+                    Criterion.builder()
+                        .shortDescription("H1.6 | `PurchasedComponent` implementieren")
+                        .addChildCriteria(
+                            criterion("Klasse `PurchasedComponent` korrekt definiert und implementiert `Component`.",
+                                JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testClassCorrect"))),
+                            criterion("Konstruktor ist korrekt.",
+                                JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testConstructor"))),
+                            criterion("Objektkonstante `price` und Methode `getPrice` sind korrekt.",
+                                JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testFieldAndGetter"))),
+                            criterion("`CPUImpl`, `MemoryImpl` und `PeripheralImpl` erben von `PurchasedComponent`.",
+                                JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testOthersExtendPurchasedComponent")))
                         ).build()
                 )
-                .build()
+                .build(),
+            Criterion.builder()
+                .shortDescription("H2 | System Modellierung")
+                .addChildCriteria(
+                    criterion("Interface `Mainboard` und Klasse `MainboardImpl` korrekt definiert.",
+                        JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testInterfaceAndClassCorrect"))),
+                    criterion("Konstruktor ist korrekt.",
+                        JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testConstructor"))),
+                    criterion("Objektattribute `peripherals` und `memories` sind korrekt.",
+                        JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testMemoryAndPeripheralFields"))),
+                    criterion("Methode `addCpu` funktioniert korrekt.",
+                        JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testAddCpu", boolean.class, boolean.class, Socket.class, Socket.class))),
+                    criterion("Methode `addMemory` und `addPeripheral` funktionieren korrekt.",
+                        JUnitTestRef.and(
+                            JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testAddMemory", int.class, List.class)),
+                            JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testAddPeripheral", int.class, List.class))
+                        )
+                    )
+                ).build()
         )
         .build();
 

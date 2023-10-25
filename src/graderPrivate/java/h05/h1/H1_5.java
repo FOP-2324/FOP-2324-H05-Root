@@ -73,7 +73,7 @@ public class H1_5 {
     }
 
     @Test
-    public void testGetCapacity() {
+    public void testGetPeripheralType() {
         MethodLink getPeripheralType = H5Links.PERIPHERAL_GET_PERIPHERAL_TYPE_METHOD_LINK.get();
 
         var instance = Assertions2.callObject(

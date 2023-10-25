@@ -165,4 +165,82 @@ public class H5Links {
         Assertions2.emptyContext(),
         (r) -> "Field `peripheralType` not found in class `PeripheralImpl`."
     );
+
+    // Class PurchasedComponent
+    public static final Supplier<TypeLink> PURCHASED_COMPONENT_LINK = () -> Assertions2.assertNotNull(
+        MODEL_PACKAGE_LINK.get().getType(identical("PurchasedComponent")),
+        Assertions2.emptyContext(),
+        (r) -> "Class `PurchasedComponent` does not exist."
+    );
+    public static final Supplier<ConstructorLink> PURCHASED_COMPONENT_CONSTRUCTOR_LINK = () -> Assertions2.assertNotNull(
+        PURCHASED_COMPONENT_LINK.get().getConstructor(BasicReflectionMatchers.sameTypes(
+            BasicTypeLink.of(double.class)
+        )),
+        Assertions2.emptyContext(),
+        (r) -> "Constructor `PurchasedComponent(double)` not found in class `PurchasedComponent`."
+    );
+    public static final Supplier<FieldLink> PURCHASED_COMPONENT_PRICE_FIELD_LINK = () -> Assertions2.assertNotNull(
+        PURCHASED_COMPONENT_LINK.get().getField(identical("price")),
+        Assertions2.emptyContext(),
+        (r) -> "Field `price` not found in class `PurchasedComponent`."
+    );
+    public static final Supplier<MethodLink> PURCHASED_COMPONENT_GET_PRICE_METHOD_LINK = () -> Assertions2.assertNotNull(
+        PURCHASED_COMPONENT_LINK.get().getMethod(identical("getPrice")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `getPrice` not found in class `PurchasedComponent`."
+    );
+
+    // Interface Mainboard
+    public static final Supplier<TypeLink> MAINBOARD_LINK = () -> Assertions2.assertNotNull(
+        MODEL_PACKAGE_LINK.get().getType(identical("Mainboard")),
+        Assertions2.emptyContext(),
+        (r) -> "Interface `Mainboard` does not exist."
+    );
+
+    // Class MainboardImpl
+    public static final Supplier<TypeLink> MAINBOARD_IMPL_LINK = () -> Assertions2.assertNotNull(
+        MODEL_PACKAGE_LINK.get().getType(identical("MainboardImpl")),
+        Assertions2.emptyContext(),
+        (r) -> "Class `MainboardImpl` does not exist."
+    );
+    public static final Supplier<ConstructorLink> MAINBOARD_IMPL_CONSTRUCTOR_LINK = () -> Assertions2.assertNotNull(
+        MAINBOARD_IMPL_LINK.get().getConstructor(BasicReflectionMatchers.sameTypes(
+            SOCKET_LINK.get(),
+            BasicTypeLink.of(int.class),
+            BasicTypeLink.of(int.class),
+            BasicTypeLink.of(double.class)
+        )),
+        Assertions2.emptyContext(),
+        (r) -> "Constructor `MainboardImpl(Socket, int, int, double)` not found in class `MainboardImpl`."
+    );
+    public static final Supplier<FieldLink> MAINBOARD_IMPL_CPU_FIELD_LINK = () -> Assertions2.assertNotNull(
+        MAINBOARD_IMPL_LINK.get().getField(identical("cpu")),
+        Assertions2.emptyContext(),
+        (r) -> "Field `cpu` not found in class `MainboardImpl`."
+    );
+    public static final Supplier<FieldLink> MAINBOARD_IMPL_MEMORIES_FIELD_LINK = () -> Assertions2.assertNotNull(
+        MAINBOARD_IMPL_LINK.get().getField(identical("memories")),
+        Assertions2.emptyContext(),
+        (r) -> "Field `memories` not found in class `MainboardImpl`."
+    );
+    public static final Supplier<FieldLink> MAINBOARD_IMPL_PERIPHERALS_FIELD_LINK = () -> Assertions2.assertNotNull(
+        MAINBOARD_IMPL_LINK.get().getField(identical("peripherals")),
+        Assertions2.emptyContext(),
+        (r) -> "Field `peripherals` not found in class `MainboardImpl`."
+    );
+    public static final Supplier<MethodLink> MAINBOARD_IMPL_ADD_CPU_METHOD_LINK = () -> Assertions2.assertNotNull(
+        MAINBOARD_IMPL_LINK.get().getMethod(identical("addCpu")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `addCpu` not found in class `MainboardImpl`."
+    );
+    public static final Supplier<MethodLink> MAINBOARD_IMPL_ADD_MEMORY_METHOD_LINK = () -> Assertions2.assertNotNull(
+        MAINBOARD_IMPL_LINK.get().getMethod(identical("addMemory")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `addMemory` not found in class `MainboardImpl`."
+    );
+    public static final Supplier<MethodLink> MAINBOARD_IMPL_ADD_PERIPHERAL_METHOD_LINK = () -> Assertions2.assertNotNull(
+        MAINBOARD_IMPL_LINK.get().getMethod(identical("addPeripheral")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `addPeripheral` not found in class `MainboardImpl`."
+    );
 }
