@@ -22,7 +22,7 @@ public class H1_4 {
     public void testMemoryInterface() {
         TypeLink memory = H5Links.MEMORY_LINK.get();
         TypeLink memoryImpl = H5Links.MEMORY_IMPL_LINK.get();
-        MethodLink getCapcity = H5Links.MEMORY_GET_CAPACITY_METHOD_LINK.get();
+        MethodLink getCapacity = H5Links.MEMORY_GET_CAPACITY_METHOD_LINK.get();
 
         H5Utils.assertCorrectModifiers(memoryImpl, Modifier.PUBLIC);
         H5Utils.assertCorrectInterfaces(memoryImpl, memory);
@@ -30,7 +30,7 @@ public class H1_4 {
         H5Utils.assertCorrectModifiers(memory, Modifier.PUBLIC, Modifier.ABSTRACT, Modifier.INTERFACE);
 
         H5Utils.assertMethodCorrect(
-            getCapcity,
+            getCapacity,
             BasicTypeLink.of(char.class),
             Modifier.PUBLIC, Modifier.ABSTRACT
         );
@@ -40,7 +40,14 @@ public class H1_4 {
     public void testMemoryImplConstructor() {
         ConstructorLink constructor = H5Links.MEMORY_IMPL_CONSTRUCTOR_LINK.get();
 
-        H5Utils.assertCorrectModifiers(constructor, Modifier.PUBLIC);
+        H5Utils.assertConstructorCorrect(
+            constructor,
+            new TypeLink[]{
+                BasicTypeLink.of(char.class),
+                BasicTypeLink.of(double.class)
+            },
+            Modifier.PUBLIC
+        );
 
         var instance = Assertions2.callObject(
             () -> constructor.invoke('a', 3.1D),

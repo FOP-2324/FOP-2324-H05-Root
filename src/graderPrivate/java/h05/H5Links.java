@@ -16,11 +16,8 @@ import static org.tudalgo.algoutils.tutor.general.match.BasicStringMatchers.iden
 
 public class H5Links {
 
-    public static final Supplier<PackageLink> MODEL_PACKAGE_LINK = () -> Assertions2.assertNotNull(
-        BasicPackageLink.of("h05.model"),
-        Assertions2.emptyContext(),
-        (r) -> "Package `h05.model` does not exist."
-    );
+    public static final Supplier<PackageLink> H05_PACKAGE_LINK = new PackageLinkSupplier("h05");
+    public static final Supplier<PackageLink> MODEL_PACKAGE_LINK = new PackageLinkSupplier("h05.model");
 
     // Interface Component
     public static final Supplier<TypeLink> COMPONENT_LINK = () -> Assertions2.assertNotNull(
@@ -243,4 +240,100 @@ public class H5Links {
         Assertions2.emptyContext(),
         (r) -> "Method `addPeripheral` not found in class `MainboardImpl`."
     );
+    public static final Supplier<MethodLink> MAINBOARD_IMPL_RATE_BY_METHOD_LINK = () -> Assertions2.assertNotNull(
+        MAINBOARD_IMPL_LINK.get().getMethod(identical("rateBy")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `rateBy` not found in class `MainboardImpl`."
+    );
+
+    // Interface ComponentRater
+    public static final Supplier<TypeLink> COMPONENT_RATER_LINK = () -> Assertions2.assertNotNull(
+        H05_PACKAGE_LINK.get().getType(identical("ComponentRater")),
+        Assertions2.emptyContext(),
+        (r) -> "Interface `ComponentRater` does not exist."
+    );
+    public static final Supplier<MethodLink> COMPONENT_RATER_CONSUME_MAINBOARD_METHOD_LINK = () -> Assertions2.assertNotNull(
+        COMPONENT_RATER_LINK.get().getMethod(identical("consumeMainboard")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `consumeMainboard` not found in interface `ComponentRater`."
+    );
+    public static final Supplier<MethodLink> COMPONENT_RATER_CONSUME_CPU_METHOD_LINK = () -> Assertions2.assertNotNull(
+        COMPONENT_RATER_LINK.get().getMethod(identical("consumeCpu")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `consumeCpu` not found in interface `ComponentRater`."
+    );
+    public static final Supplier<MethodLink> COMPONENT_RATER_CONSUME_MEMORY_METHOD_LINK = () -> Assertions2.assertNotNull(
+        COMPONENT_RATER_LINK.get().getMethod(identical("consumeMemory")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `consumeMemory` not found in interface `ComponentRater`."
+    );
+    public static final Supplier<MethodLink> COMPONENT_RATER_CONSUME_PERIPHERAL_METHOD_LINK = () -> Assertions2.assertNotNull(
+        COMPONENT_RATER_LINK.get().getMethod(identical("consumePeripheral")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `consumePeripheral` not found in interface `ComponentRater`."
+    );
+
+    // Interface Configuration
+    public static final Supplier<TypeLink> CONFIGURATION_LINK = () -> Assertions2.assertNotNull(
+        MODEL_PACKAGE_LINK.get().getType(identical("Configuration")),
+        Assertions2.emptyContext(),
+        (r) -> "Interface `Configuration` does not exist."
+    );
+    public static final Supplier<MethodLink> CONFIGURATION_RATE_BY_METHOD_LINK = () -> Assertions2.assertNotNull(
+        CONFIGURATION_LINK.get().getMethod(identical("rateBy")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `rateBy` not found in interface `Configuration`."
+    );
+
+    // Class TotalCostRater
+    public static final Supplier<TypeLink> TOTAL_COST_RATER_LINK = () -> Assertions2.assertNotNull(
+        H05_PACKAGE_LINK.get().getType(identical("TotalCostRater")),
+        Assertions2.emptyContext(),
+        (r) -> "Class `TotalCostRater` does not exist."
+    );
+    public static final Supplier<MethodLink> TOTAL_COST_RATER_GET_TOTAL_COST_METHOD_LINK = () -> Assertions2.assertNotNull(
+        TOTAL_COST_RATER_LINK.get().getMethod(identical("getTotalCost")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `getTotalCost` not found in class `TotalCostRater`."
+    );
+
+    // Class MachineLearningRater
+    public static final Supplier<TypeLink> MACHINE_LEARNING_RATER_LINK = () -> Assertions2.assertNotNull(
+        H05_PACKAGE_LINK.get().getType(identical("MachineLearningRater")),
+        Assertions2.emptyContext(),
+        (r) -> "Class `MachineLearningRater` does not exist."
+    );
+    public static final Supplier<MethodLink> MACHINE_LEARNING_RATER_CHECK_MODEL_METHOD_LINK = () -> Assertions2.assertNotNull(
+        MACHINE_LEARNING_RATER_LINK.get().getMethod(identical("checkModel")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `checkModel` not found in class `MachineLearningRater`."
+    );
+
+    private static class PackageLinkSupplier implements Supplier<PackageLink> {
+
+        private final String name;
+
+        private PackageLink value = null;
+        private boolean initialized = false;
+
+        public PackageLinkSupplier(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public PackageLink get() {
+            if (!initialized) {
+                value = init();
+                initialized = true;
+            }
+
+            return value;
+        }
+
+        private PackageLink init() {
+            return BasicPackageLink.of(name);
+        }
+    }
+
+    // Interface ComponentRater
 }

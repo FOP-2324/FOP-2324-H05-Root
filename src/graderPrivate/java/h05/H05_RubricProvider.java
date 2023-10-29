@@ -7,6 +7,12 @@ import h05.h1.H1_4;
 import h05.h1.H1_5;
 import h05.h1.H1_6;
 import h05.h2.H2;
+import h05.h3.H3_1;
+import h05.h3.H3_2;
+import h05.h3.H3_3;
+import h05.model.CPU;
+import h05.model.Memory;
+import h05.model.Peripheral;
 import h05.model.Socket;
 import org.sourcegrade.jagr.api.rubric.Criterion;
 import org.sourcegrade.jagr.api.rubric.JUnitTestRef;
@@ -108,6 +114,36 @@ public class H05_RubricProvider implements RubricProvider {
                             JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testAddPeripheral", int.class, List.class))
                         )
                     )
+                ).build(),
+            Criterion.builder()
+                .shortDescription("H3 | Bewertung")
+                .addChildCriteria(
+                    Criterion.builder()
+                        .shortDescription("H3.1 | Interface `ComponentRater`")
+                        .addChildCriteria(
+                            criterion("Interface `ComponentRater` korrekt definiert.",
+                                JUnitTestRef.ofMethod(() -> H3_1.class.getDeclaredMethod("testComponentRaterInterface")))
+                        ).build(),
+                    Criterion.builder()
+                        .shortDescription("H3.2 | Interface `Configuration`")
+                        .addChildCriteria(
+                            criterion("Interface `Configuration` korrekt defininiert.",
+                                JUnitTestRef.ofMethod(() -> H3_2.class.getDeclaredMethod("testConfigurationInterface"))),
+                            criterion("Klasse `MainboardImpl` verwendet das Interface `Configuration` korrekt.",
+                                JUnitTestRef.ofMethod(() -> H3_2.class.getDeclaredMethod("testMainboardImplAdjustment"))),
+                            criterion("Methode `rateBy` korrekt implementiert.",
+                                JUnitTestRef.ofMethod(() -> H3_2.class.getDeclaredMethod("testMainboardImplRateBy", CPU.class, Memory[].class, Peripheral[].class)))
+                        ).build(),
+                    Criterion.builder()
+                        .shortDescription("H3.3 | Verschiedene Implementierungen")
+                        .addChildCriteria(
+                            criterion("Klasse `TotalCostRater` ist korrekt.",
+                                JUnitTestRef.ofMethod(() -> H3_3.class.getDeclaredMethod("testTotalCostRater", double.class, double.class, double.class, double.class))),
+                            criterion("Klasse `MachineLearningRater` ist korrekt.",
+                                JUnitTestRef.ofMethod(() -> H3_3.class.getDeclaredMethod("testMachineLearningRater"))),
+                            criterion("Methode `checkModel` ist korrekt.",
+                                JUnitTestRef.ofMethod(() -> H3_3.class.getDeclaredMethod("testMachineLearningRaterCheckModel", int.class, List.class, int.class, int.class)))
+                        ).build()
                 ).build()
         )
         .build();

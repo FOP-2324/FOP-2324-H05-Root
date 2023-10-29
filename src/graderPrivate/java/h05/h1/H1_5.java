@@ -7,6 +7,7 @@ import h05.model.PeripheralType;
 import org.junit.jupiter.api.Test;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
+import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
 import org.tudalgo.algoutils.tutor.general.reflections.ConstructorLink;
 import org.tudalgo.algoutils.tutor.general.reflections.FieldLink;
 import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
@@ -40,7 +41,14 @@ public class H1_5 {
     public void testPeripheralImplConstructor() {
         ConstructorLink constructor = H5Links.PERIPHERAL_IMPL_CONSTRUCTOR_LINK.get();
 
-        H5Utils.assertCorrectModifiers(constructor, Modifier.PUBLIC);
+        H5Utils.assertConstructorCorrect(
+            constructor,
+            new TypeLink[]{
+                H5Links.PERIPHERAL_TYPE_LINK.get(),
+                BasicTypeLink.of(double.class)
+            },
+            Modifier.PUBLIC
+        );
 
         var instance = Assertions2.callObject(
             () -> constructor.invoke(PeripheralType.ETHERNET, 3.1D),

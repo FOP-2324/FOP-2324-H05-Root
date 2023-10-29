@@ -55,7 +55,16 @@ public class H1_3 {
     public void testCPUImplConstructor() {
         ConstructorLink constructor = H5Links.CPU_IMPL_CONSTRUCTOR_LINK.get();
 
-        H5Utils.assertCorrectModifiers(constructor, Modifier.PUBLIC);
+        H5Utils.assertConstructorCorrect(
+            constructor,
+            new TypeLink[]{
+                H5Links.SOCKET_LINK.get(),
+                BasicTypeLink.of(int.class),
+                BasicTypeLink.of(double.class),
+                BasicTypeLink.of(double.class)
+            },
+            Modifier.PUBLIC
+        );
 
         var instance = Assertions2.callObject(
             () -> constructor.invoke(Socket.AM4, 1, 2.5D, 3.5D),

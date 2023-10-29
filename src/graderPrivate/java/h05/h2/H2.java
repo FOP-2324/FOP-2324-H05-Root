@@ -76,7 +76,16 @@ public class H2 {
         var memoriesField = H5Links.MAINBOARD_IMPL_MEMORIES_FIELD_LINK.get();
         var peripheralsField = H5Links.MAINBOARD_IMPL_PERIPHERALS_FIELD_LINK.get();
 
-        H5Utils.assertCorrectModifiers(constructor, Modifier.PUBLIC);
+        H5Utils.assertConstructorCorrect(
+            constructor,
+            new TypeLink[]{
+                H5Links.SOCKET_LINK.get(),
+                BasicTypeLink.of(int.class),
+                BasicTypeLink.of(int.class),
+                BasicTypeLink.of(double.class)
+            },
+            Modifier.PUBLIC
+        );
 
         var instance = Assertions2.callObject(
             () -> constructor.invoke(Socket.AM4, 2, 4, 5.3D),
@@ -124,6 +133,13 @@ public class H2 {
         var constructor = H5Links.MAINBOARD_IMPL_CONSTRUCTOR_LINK.get();
         var addCpu = H5Links.MAINBOARD_IMPL_ADD_CPU_METHOD_LINK.get();
         var cpuField = H5Links.MAINBOARD_IMPL_CPU_FIELD_LINK.get();
+
+        H5Utils.assertMethodCorrect(
+            addCpu,
+            BasicTypeLink.of(boolean.class),
+            new TypeLink[]{H5Links.CPU_LINK.get()},
+            Modifier.PUBLIC
+        );
 
         var context = Assertions2.contextBuilder()
             .add("cpuFieldNull", cpuFieldNull)
@@ -194,6 +210,13 @@ public class H2 {
         var constructor = H5Links.MAINBOARD_IMPL_CONSTRUCTOR_LINK.get();
         var addMemory = H5Links.MAINBOARD_IMPL_ADD_MEMORY_METHOD_LINK.get();
         var memoriesField = H5Links.MAINBOARD_IMPL_MEMORIES_FIELD_LINK.get();
+
+        H5Utils.assertMethodCorrect(
+            addMemory,
+            BasicTypeLink.of(boolean.class),
+            new TypeLink[]{H5Links.MEMORY_LINK.get()},
+            Modifier.PUBLIC
+        );
 
         var context = Assertions2.contextBuilder()
             .add("memorySlots", memorySlots)
@@ -274,6 +297,13 @@ public class H2 {
         var constructor = H5Links.MAINBOARD_IMPL_CONSTRUCTOR_LINK.get();
         var addPeripheral = H5Links.MAINBOARD_IMPL_ADD_PERIPHERAL_METHOD_LINK.get();
         var peripheralsField = H5Links.MAINBOARD_IMPL_PERIPHERALS_FIELD_LINK.get();
+
+        H5Utils.assertMethodCorrect(
+            addPeripheral,
+            BasicTypeLink.of(boolean.class),
+            new TypeLink[]{H5Links.PERIPHERAL_LINK.get()},
+            Modifier.PUBLIC
+        );
 
         var context = Assertions2.contextBuilder()
             .add("peripheralSlots", peripheralSlots)
@@ -374,6 +404,11 @@ public class H2 {
         @Override
         public double getPrice() {
             return 0;
+        }
+
+        @Override
+        public String toString() {
+            return "TestCpu{" + "socket=" + socket + "'}'";
         }
     }
 

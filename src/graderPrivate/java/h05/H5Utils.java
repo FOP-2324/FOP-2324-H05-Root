@@ -3,6 +3,7 @@ package h05;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.basic.BasicEnvironment;
 import org.tudalgo.algoutils.tutor.general.match.Stringifiable;
+import org.tudalgo.algoutils.tutor.general.reflections.ConstructorLink;
 import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.Modifier;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
@@ -72,6 +73,15 @@ public class H5Utils {
         }
     }
 
+    public static void assertConstructorCorrect(
+        ConstructorLink constructor,
+        TypeLink[] parameterTypes,
+        Modifier... modifiers
+    ) {
+        assertCorrectModifiers(constructor, modifiers);
+        assertCorrectParameters(constructor, parameterTypes);
+    }
+
     public static void assertMethodCorrect(
         MethodLink method,
         TypeLink returnType,
@@ -80,6 +90,17 @@ public class H5Utils {
         assertCorrectModifiers(method, modifiers);
         assertCorrectReturnType(method, returnType);
         assertHasNoParameters(method);
+    }
+
+    public static void assertMethodCorrect(
+        MethodLink method,
+        TypeLink returnType,
+        TypeLink[] parameterTypes,
+        Modifier... modifiers
+    ) {
+        assertCorrectModifiers(method, modifiers);
+        assertCorrectReturnType(method, returnType);
+        assertCorrectParameters(method, parameterTypes);
     }
 
     private static <T extends WithTypeList> void assertHasNoParameters(T method) {
@@ -91,6 +112,42 @@ public class H5Utils {
             Assertions2.emptyContext(),
             (r) -> "Method `%s` should have no parameters.".formatted(methodString)
         );
+    }
+
+    private static <T extends WithTypeList> void assertCorrectParameters(T method, TypeLink... parameterTypes) {
+        if (parameterTypes.length == 0) {
+            assertHasNoParameters(method);
+            return;
+        }
+
+        var exactParameters = Arrays.stream(parameterTypes).map(H5Utils::toStringifiable).collect(Collectors.toSet());
+        var actualParameters = method.typeList().stream().map(H5Utils::toStringifiable).collect(Collectors.toSet());
+
+        var methodString = BasicEnvironment.getInstance().getStringifier().stringify(method);
+
+        var missingParameters = new HashSet<>(exactParameters);
+        missingParameters.removeAll(actualParameters);
+
+        if (!missingParameters.isEmpty()) {
+            Assertions2.fail(
+                Assertions2.emptyContext(),
+                (r) -> "Method `%s` should have parameters %s, but is missing %s.".formatted(
+                    methodString, exactParameters, missingParameters
+                )
+            );
+        }
+
+        var extraParameters = new HashSet<>(actualParameters);
+        extraParameters.removeAll(exactParameters);
+
+        if (!extraParameters.isEmpty()) {
+            Assertions2.fail(
+                Assertions2.emptyContext(),
+                (r) -> "Method `%s` should have parameters %s, but has extra %s.".formatted(
+                    methodString, exactParameters, extraParameters
+                )
+            );
+        }
     }
 
     public static void assertCorrectReturnType(
@@ -137,11 +194,11 @@ public class H5Utils {
         }
     }
 
-    public static Object createUnsafeInstance(Class<?> c) {
+    public static <T> T createUnsafeInstance(Class<?> c) {
         try {
             Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
             theUnsafe.setAccessible(true);
-            return ((Unsafe) theUnsafe.get(null)).allocateInstance(c);
+            return (T) ((Unsafe) theUnsafe.get(null)).allocateInstance(c);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

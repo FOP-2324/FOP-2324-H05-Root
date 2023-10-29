@@ -29,7 +29,7 @@ public class H1_6 {
     public void testConstructor() {
         var constructor = H5Links.PURCHASED_COMPONENT_CONSTRUCTOR_LINK.get();
 
-        H5Utils.assertCorrectModifiers(constructor, Modifier.PUBLIC);
+        H5Utils.assertConstructorCorrect(constructor, new TypeLink[]{BasicTypeLink.of(double.class)}, Modifier.PUBLIC);
 
         var instance = Assertions2.callObject(
             () -> new TestComponent(3.1D),
@@ -51,7 +51,6 @@ public class H1_6 {
         var getPrice = H5Links.PURCHASED_COMPONENT_GET_PRICE_METHOD_LINK.get();
 
         H5Utils.assertCorrectModifiers(price, Modifier.PRIVATE, Modifier.FINAL);
-        H5Utils.assertCorrectModifiers(getPrice, Modifier.PUBLIC);
 
         H5Utils.assertMethodCorrect(
             getPrice,
