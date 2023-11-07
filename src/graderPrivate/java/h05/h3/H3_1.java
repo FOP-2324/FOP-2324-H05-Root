@@ -16,7 +16,7 @@ public class H3_1 {
     public void testComponentRaterInterface() {
         TypeLink componentRater = H5Links.COMPONENT_RATER_LINK.get();
         MethodLink consumeMainboard = H5Links.COMPONENT_RATER_CONSUME_MAINBOARD_METHOD_LINK.get();
-        MethodLink consumeCpu = H5Links.COMPONENT_RATER_CONSUME_CPU_METHOD_LINK.get();
+        MethodLink consumeCPU = H5Links.COMPONENT_RATER_CONSUME_CPU_METHOD_LINK.get();
         MethodLink consumeMemory = H5Links.COMPONENT_RATER_CONSUME_MEMORY_METHOD_LINK.get();
         MethodLink consumePeripheral = H5Links.COMPONENT_RATER_CONSUME_PERIPHERAL_METHOD_LINK.get();
 
@@ -30,7 +30,7 @@ public class H3_1 {
             Modifier.PUBLIC, Modifier.ABSTRACT
         );
         H5Utils.assertMethodCorrect(
-            consumeCpu,
+            consumeCPU,
             BasicTypeLink.of(void.class),
             new TypeLink[]{H5Links.CPU_LINK.get()},
             Modifier.PUBLIC, Modifier.ABSTRACT

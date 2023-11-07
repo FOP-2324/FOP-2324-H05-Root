@@ -131,11 +131,11 @@ public class H2 {
     @MethodSource("generateAddCpuArguments")
     public void testAddCpu(boolean cpuFieldNull, boolean cpuArgumentNull, Socket mainboardSocket, Socket cpuArgSocket) {
         var constructor = H5Links.MAINBOARD_IMPL_CONSTRUCTOR_LINK.get();
-        var addCpu = H5Links.MAINBOARD_IMPL_ADD_CPU_METHOD_LINK.get();
+        var addCPU = H5Links.MAINBOARD_IMPL_ADD_CPU_METHOD_LINK.get();
         var cpuField = H5Links.MAINBOARD_IMPL_CPU_FIELD_LINK.get();
 
         H5Utils.assertMethodCorrect(
-            addCpu,
+            addCPU,
             BasicTypeLink.of(boolean.class),
             new TypeLink[]{H5Links.CPU_LINK.get()},
             Modifier.PUBLIC
@@ -162,9 +162,9 @@ public class H2 {
         var argumentCpu = cpuArgumentNull ? null : new TestCpu(cpuArgSocket);
 
         var result = Assertions2.callObject(
-            Unchecked.uncheckedObjectCallable(() -> addCpu.invoke(instance, argumentCpu)),
+            Unchecked.uncheckedObjectCallable(() -> addCPU.invoke(instance, argumentCpu)),
             context,
-            (r) -> "Method `addCpu(CPU)` in class `MainboardImpl` threw an exception."
+            (r) -> "Method `addCPU(CPU)` in class `MainboardImpl` threw an exception."
         );
 
         boolean expectedResult = !cpuArgumentNull && cpuFieldNull && mainboardSocket == cpuArgSocket;
@@ -172,14 +172,14 @@ public class H2 {
             expectedResult,
             result,
             context,
-            (r) -> "Method `addCpu(CPU)` in class `MainboardImpl` did not return the correct value."
+            (r) -> "Method `addCPU(CPU)` in class `MainboardImpl` did not return the correct value."
         );
 
         Assertions2.assertEquals(
             expectedResult ? argumentCpu : cpuFieldValue,
             cpuField.get(instance),
             context,
-            (r) -> "Method `addCpu(CPU)` in class `MainboardImpl` did not set the `cpu` field correctly."
+            (r) -> "Method `addCPU(CPU)` in class `MainboardImpl` did not set the `cpu` field correctly."
         );
     }
 

@@ -108,7 +108,7 @@ public class H05_RubricProvider implements RubricProvider {
                         JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testConstructor"))),
                     criterion("Objektattribute `peripherals` und `memories` sind korrekt.",
                         JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testMemoryAndPeripheralFields"))),
-                    criterion("Methode `addCpu` funktioniert korrekt.",
+                    criterion("Methode `addCPU` funktioniert korrekt.",
                         JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testAddCpu", boolean.class, boolean.class, Socket.class, Socket.class))),
                     criterion("Methode `addMemory` und `addPeripheral` funktionieren korrekt.",
                         JUnitTestRef.and(
@@ -163,7 +163,7 @@ public class H05_RubricProvider implements RubricProvider {
                                 JUnitTestRef.ofMethod(() -> H4_2.class.getDeclaredMethod("testVirtualMemoryMethodsAndConstructor", double.class, int.class)))
                         ).build(),
                     Criterion.builder()
-                        .shortDescription("H4.3 | Klassse `ServerCenter`")
+                        .shortDescription("H4.3 | Klasse `ServerCenter`")
                         .addChildCriteria(
                             criterion("Klasse `ServerCenter` korrekt definiert.",
                                 JUnitTestRef.ofMethod(() -> H4_3.class.getDeclaredMethod("testServerCenterClassCorrect"))),
@@ -209,7 +209,7 @@ public class H05_RubricProvider implements RubricProvider {
      * - Klasse definiert und Interface korrekt implementiert und von PurchasedComponent abgeleitet
      * - Slots für Memory und Peripheral
      * - Konstruktor korrekt
-     * - addCpu
+     * - addCPU
      * - addMemory, addPeripheral
      * <p>
      * H3.1:

@@ -83,19 +83,19 @@ public class H3_2 {
         );
 
         Assertions2.call(() -> {
-                mainboard.addCpu(cpu);
+                mainboard.addCPU(cpu);
                 for (Memory memory : memories)
                     mainboard.addMemory(memory);
                 for (Peripheral peripheral : peripherals)
                     mainboard.addPeripheral(peripheral);
             },
             context,
-            (r) -> "Method `addCpu`, `addMemory` or `addPeripheral` in class `MainboardImpl` threw an exception."
+            (r) -> "Method `addCPU`, `addMemory` or `addPeripheral` in class `MainboardImpl` threw an exception."
         );
 
         ComponentRater rater = Mockito.mock(ComponentRater.class);
         Mockito.doNothing().when(rater).consumeMainboard(Mockito.any());
-        Mockito.doNothing().when(rater).consumeCpu(Mockito.any());
+        Mockito.doNothing().when(rater).consumeCPU(Mockito.any());
         Mockito.doNothing().when(rater).consumeMemory(Mockito.any());
         Mockito.doNothing().when(rater).consumePeripheral(Mockito.any());
 
@@ -108,8 +108,8 @@ public class H3_2 {
         Mockito.verify(rater).consumeMainboard(Mockito.same(mainboard));
 
         if (cpu != null)
-            Mockito.verify(rater).consumeCpu(Mockito.same(cpu));
-        Mockito.verify(rater, Mockito.never()).consumeCpu(null);
+            Mockito.verify(rater).consumeCPU(Mockito.same(cpu));
+        Mockito.verify(rater, Mockito.never()).consumeCPU(null);
 
         for (Memory memory : memories) {
             if (memory != null)

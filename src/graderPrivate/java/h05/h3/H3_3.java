@@ -65,7 +65,7 @@ public class H3_3 {
         double totalPrice = 0;
         rater.consumeMainboard(componentWithCost(Mainboard.class, mainboardPrice));
         totalPrice += mainboardPrice;
-        rater.consumeCpu(componentWithCost(CPU.class, cpuPrice));
+        rater.consumeCPU(componentWithCost(CPU.class, cpuPrice));
         totalPrice += cpuPrice;
         for (int i = 0; i < 5; i++) {
             rater.consumeMemory(componentWithCost(Memory.class, i * memoryPrice));
@@ -118,12 +118,12 @@ public class H3_3 {
         MachineLearningRater rater = new MachineLearningRater();
 
         Assertions2.call(() -> {
-                rater.consumeCpu(componentWithCost(CPU.class, 5));
+                rater.consumeCPU(componentWithCost(CPU.class, 5));
                 rater.consumeMainboard(componentWithCost(Mainboard.class, 5));
                 rater.consumePeripheral(componentWithCost(Peripheral.class, 5));
             },
             context,
-            (r) -> "Method `consumeCpu`, `consumeMainboard` or `consumePeripheral` in class `MachineLearningRater` threw an exception."
+            (r) -> "Method `consumeCPU`, `consumeMainboard` or `consumePeripheral` in class `MachineLearningRater` threw an exception."
         );
 
         for (int i = 0; i < tpuCount; i++) {

@@ -226,9 +226,9 @@ public class H5Links {
         (r) -> "Field `peripherals` not found in class `MainboardImpl`."
     );
     public static final Supplier<MethodLink> MAINBOARD_IMPL_ADD_CPU_METHOD_LINK = () -> Assertions2.assertNotNull(
-        MAINBOARD_IMPL_LINK.get().getMethod(identical("addCpu")),
+        MAINBOARD_IMPL_LINK.get().getMethod(identical("addCPU")),
         Assertions2.emptyContext(),
-        (r) -> "Method `addCpu` not found in class `MainboardImpl`."
+        (r) -> "Method `addCPU` not found in class `MainboardImpl`."
     );
     public static final Supplier<MethodLink> MAINBOARD_IMPL_ADD_MEMORY_METHOD_LINK = () -> Assertions2.assertNotNull(
         MAINBOARD_IMPL_LINK.get().getMethod(identical("addMemory")),
@@ -258,9 +258,9 @@ public class H5Links {
         (r) -> "Method `consumeMainboard` not found in interface `ComponentRater`."
     );
     public static final Supplier<MethodLink> COMPONENT_RATER_CONSUME_CPU_METHOD_LINK = () -> Assertions2.assertNotNull(
-        COMPONENT_RATER_LINK.get().getMethod(identical("consumeCpu")),
+        COMPONENT_RATER_LINK.get().getMethod(identical("consumeCPU")),
         Assertions2.emptyContext(),
-        (r) -> "Method `consumeCpu` not found in interface `ComponentRater`."
+        (r) -> "Method `consumeCPU` not found in interface `ComponentRater`."
     );
     public static final Supplier<MethodLink> COMPONENT_RATER_CONSUME_MEMORY_METHOD_LINK = () -> Assertions2.assertNotNull(
         COMPONENT_RATER_LINK.get().getMethod(identical("consumeMemory")),
