@@ -17,7 +17,7 @@ public interface ComponentRater {
      * Consume a given cpu
      * @param cpu cpu which gets rated
      */
-    void consumeCpu(CPU cpu);
+    void consumeCPU(CPU cpu);
 
     /**
      * Consume a given memory

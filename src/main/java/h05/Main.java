@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
 
         MainboardImpl desktop = new MainboardImpl(Socket.AM4, 2, 2, 100);
-        desktop.addCpu(new CPUImpl(Socket.AM4, 10, 3.3e9, 300));
+        desktop.addCPU(new CPUImpl(Socket.AM4, 10, 3.3e9, 300));
         desktop.addMemory(new MemoryImpl((char) 8, 60));
         VirtualMemory vmem = new VirtualMemory(0.5);
         desktop.addMemory(vmem);

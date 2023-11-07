@@ -1,6 +1,6 @@
 package h05;
 
-import h05.model.MainboardImpl;
+import h05.model.Mainboard;
 import h05.model.Configuration;
 
 import java.util.ArrayList;
@@ -10,19 +10,19 @@ import java.util.ArrayList;
  */
 public class ServerCenter implements Configuration {
 
-    ArrayList<MainboardImpl> mainboards = new ArrayList<>();
+    ArrayList<Mainboard> mainboards = new ArrayList<>();
 
     /**
-     * Adds a {@link MainboardImpl} to the server center
-     * @param mainboard specific {@link MainboardImpl} which gets included
+     * Adds a {@link Mainboard} to the server center
+     * @param mainboard specific {@link Mainboard} which gets included
      */
-    void addMainboard(MainboardImpl mainboard){
+    public void addMainboard(Mainboard mainboard){
         mainboards.add(mainboard);
     }
 
     @Override
     public void rateBy(ComponentRater rater) {
-        for(MainboardImpl mainboard : mainboards){
+        for(Mainboard mainboard : mainboards){
             mainboard.rateBy(rater);
         }
     }

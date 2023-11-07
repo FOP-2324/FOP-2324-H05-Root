@@ -15,7 +15,7 @@ public class TotalCostRater implements ComponentRater {
     }
 
     @Override
-    public void consumeCpu(CPU cpu) {
+    public void consumeCPU(CPU cpu) {
         cost += cpu.getPrice();
     }
 

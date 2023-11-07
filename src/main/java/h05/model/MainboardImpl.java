@@ -33,7 +33,7 @@ public class MainboardImpl extends PurchasedComponent implements Mainboard {
      * @param cpu cpu, which gets added in the system
      * @return true if operation was successful, otherwise false
      */
-    public boolean addCpu(CPU cpu) {
+    public boolean addCPU(CPU cpu) {
         if(cpu != null && this.cpu == null && cpu.getSocket() == socket){
             this.cpu = cpu;
             return true;
@@ -74,7 +74,7 @@ public class MainboardImpl extends PurchasedComponent implements Mainboard {
         rater.consumeMainboard(this);
 
         if(cpu != null) {
-            rater.consumeCpu(cpu);
+            rater.consumeCPU(cpu);
         }
 
         for(int i = 0; i < nextMemorySlot; i++){

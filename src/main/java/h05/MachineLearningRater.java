@@ -16,7 +16,7 @@ public class MachineLearningRater implements ComponentRater {
     }
 
     @Override
-    public void consumeCpu(CPU cpu) {
+    public void consumeCPU(CPU cpu) {
 
     }
 
