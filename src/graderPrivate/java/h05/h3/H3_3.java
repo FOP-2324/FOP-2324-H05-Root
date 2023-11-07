@@ -101,6 +101,13 @@ public class H3_3 {
     public void testMachineLearningRaterCheckModel(int modelSize, List<Character> memorySizes, int tpuCount, int nonTpuCount) {
         MethodLink checkModel = H5Links.MACHINE_LEARNING_RATER_CHECK_MODEL_METHOD_LINK.get();
 
+        H5Utils.assertMethodCorrect(
+            checkModel,
+            BasicTypeLink.of(double.class),
+            new TypeLink[]{BasicTypeLink.of(int.class)},
+            Modifier.PUBLIC
+        );
+
         Context context = Assertions2.contextBuilder()
             .add("modelSize", modelSize)
             .add("memorySizes", memorySizes)

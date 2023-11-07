@@ -3,6 +3,7 @@ package h05;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.basic.BasicEnvironment;
 import org.tudalgo.algoutils.tutor.general.match.Stringifiable;
+import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
 import org.tudalgo.algoutils.tutor.general.reflections.ConstructorLink;
 import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.Modifier;
@@ -36,6 +37,19 @@ public class H5Utils {
             toStringifiable(type.superType()),
             Assertions2.emptyContext(),
             (r) -> "`%s` should extend `%s`.".formatted(typeString, superclassString)
+        );
+    }
+
+    public static void assertHasNoSuperclass(
+        TypeLink type
+    ) {
+        var typeString = BasicEnvironment.getInstance().getStringifier().stringify(type);
+
+        Assertions2.assertEquals(
+            toStringifiable(BasicTypeLink.of(Object.class)),
+            toStringifiable(type.superType()),
+            Assertions2.emptyContext(),
+            (r) -> "`%s` should not extend any class.".formatted(typeString)
         );
     }
 

@@ -10,6 +10,8 @@ import h05.h2.H2;
 import h05.h3.H3_1;
 import h05.h3.H3_2;
 import h05.h3.H3_3;
+import h05.h4.H4_2;
+import h05.h4.H4_3;
 import h05.model.CPU;
 import h05.model.Memory;
 import h05.model.Peripheral;
@@ -143,6 +145,31 @@ public class H05_RubricProvider implements RubricProvider {
                                 JUnitTestRef.ofMethod(() -> H3_3.class.getDeclaredMethod("testMachineLearningRater"))),
                             criterion("Methode `checkModel` ist korrekt.",
                                 JUnitTestRef.ofMethod(() -> H3_3.class.getDeclaredMethod("testMachineLearningRaterCheckModel", int.class, List.class, int.class, int.class)))
+                        ).build()
+                ).build(),
+            Criterion.builder()
+                .shortDescription("H4 | Testen")
+                .addChildCriteria(
+                    Criterion.builder()
+                        .shortDescription("H4.1 | Explizite Konfiguration testen")
+                        .addChildCriteria(
+                        ).build(),
+                    Criterion.builder()
+                        .shortDescription("H4.2 | Klasse `VirtualMemory`")
+                        .addChildCriteria(
+                            criterion("VirtualMemory implementiert Memory, aber ist nicht von MemoryImpl abgeleitet.",
+                                JUnitTestRef.ofMethod(() -> H4_2.class.getDeclaredMethod("testVirtualMemoryClassCorrect"))),
+                            criterion("Konstruktor, Konstante, `getCapacity` und `getPrice` korrekt.",
+                                JUnitTestRef.ofMethod(() -> H4_2.class.getDeclaredMethod("testVirtualMemoryMethodsAndConstructor", double.class, int.class)))
+                        ).build(),
+                    Criterion.builder()
+                        .shortDescription("H4.3 | Klassse `ServerCenter`")
+                        .addChildCriteria(
+                            criterion("Klasse `ServerCenter` korrekt definiert.",
+                                JUnitTestRef.ofMethod(() -> H4_3.class.getDeclaredMethod("testServerCenterClassCorrect"))),
+                            criterion("Methoden `addMainboard` und `rateBy` korrekt.",
+                                JUnitTestRef.ofMethod(() -> H4_3.class.getDeclaredMethod("testAddMainboardAndRateBy")),
+                                2)
                         ).build()
                 ).build()
         )

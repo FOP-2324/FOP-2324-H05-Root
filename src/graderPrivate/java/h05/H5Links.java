@@ -309,6 +309,37 @@ public class H5Links {
         (r) -> "Method `checkModel` not found in class `MachineLearningRater`."
     );
 
+    // Class VirtualMemory
+    public static final Supplier<TypeLink> VIRTUAL_MEMORY_LINK = () -> Assertions2.assertNotNull(
+        MODEL_PACKAGE_LINK.get().getType(identical("VirtualMemory")),
+        Assertions2.emptyContext(),
+        (r) -> "Class `VirtualMemory` does not exist."
+    );
+    public static final Supplier<ConstructorLink> VIRTUAL_MEMORY_CONSTRUCTOR_LINK = () -> Assertions2.assertNotNull(
+        VIRTUAL_MEMORY_LINK.get().getConstructor(BasicReflectionMatchers.sameTypes(
+            BasicTypeLink.of(double.class)
+        )),
+        Assertions2.emptyContext(),
+        (r) -> "Constructor `VirtualMemory(double)` not found in class `VirtualMemory`."
+    );
+    public static final Supplier<MethodLink> VIRTUAL_MEMORY_SET_CAPACITY_METHOD_LINK = () -> Assertions2.assertNotNull(
+        VIRTUAL_MEMORY_LINK.get().getMethod(identical("setCapacity")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `setCapacity` not found in class `VirtualMemory`."
+    );
+
+    // Class ServerCenter
+    public static final Supplier<TypeLink> SERVER_CENTER_LINK = () -> Assertions2.assertNotNull(
+        H05_PACKAGE_LINK.get().getType(identical("ServerCenter")),
+        Assertions2.emptyContext(),
+        (r) -> "Class `ServerCenter` does not exist."
+    );
+    public static final Supplier<MethodLink> SERVER_CENTER_ADD_MAINBOARD_METHOD_LINK = () -> Assertions2.assertNotNull(
+        SERVER_CENTER_LINK.get().getMethod(identical("addMainboard")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `addMainboard` not found in class `ServerCenter`."
+    );
+
     private static class PackageLinkSupplier implements Supplier<PackageLink> {
 
         private final String name;
