@@ -21,11 +21,13 @@ public class Main {
         MainboardImpl desktop = new MainboardImpl(Socket.AM4, 2, 2, 100);
         desktop.addCPU(new CPUImpl(Socket.AM4, 10, 3.3e9, 300));
         desktop.addMemory(new MemoryImpl((char) 8, 60));
+        desktop.addPeripheral(new PeripheralImpl(PeripheralType.GPU, 300));
+
 
         TotalCostRater totalCostRater = new TotalCostRater();
         desktop.rateBy(totalCostRater);
         System.out.println("Price: " + totalCostRater.getTotalCost());
-        StudentTestUtils.testWithinRange(460.0 - EPSILON, 460.0 + EPSILON, totalCostRater.getTotalCost());
+        StudentTestUtils.testWithinRange(760.0 - EPSILON, 760 + EPSILON, totalCostRater.getTotalCost());
 
 
         MachineLearningRater machineLearningRater = new MachineLearningRater();
