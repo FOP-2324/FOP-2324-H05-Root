@@ -64,8 +64,6 @@ public class H1_4 {
             Assertions2.emptyContext(),
             (r) -> "Constructor `MemoryImpl(char, double)` did not set the `capacity` field correctly."
         );
-
-        // TODO: Price field
     }
 
     @Test

@@ -94,8 +94,8 @@ public class H05_RubricProvider implements RubricProvider {
                                 JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testConstructor"))),
                             criterion("Objektkonstante `price` und Methode `getPrice` sind korrekt.",
                                 JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testFieldAndGetter"))),
-                            criterion("`CPUImpl`, `MemoryImpl` und `PeripheralImpl` erben von `PurchasedComponent`.",
-                                JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testOthersExtendPurchasedComponent")))
+                            criterion("`CPUImpl`, `MemoryImpl` und `PeripheralImpl` erben von `PurchasedComponent` und `getPrice` sowie der Konstruktor wurden angepasst.",
+                                JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testOthersWereAdjustedCorrectly")))
                         ).build()
                 )
                 .build(),

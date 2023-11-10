@@ -65,8 +65,6 @@ public class H1_5 {
             Assertions2.emptyContext(),
             (r) -> "Constructor `PeripheralImpl(char, double)` did not set the `peripheralType` field correctly."
         );
-
-        // TODO: Price field
     }
 
     @Test

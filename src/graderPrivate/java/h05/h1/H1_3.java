@@ -95,8 +95,6 @@ public class H1_3 {
             Assertions2.emptyContext(),
             (r) -> "Constructor `CPUImpl(Socket, int, double, double)` did not set the `frequency` field correctly."
         );
-
-        // TODO: Price field
     }
 
     @Test
