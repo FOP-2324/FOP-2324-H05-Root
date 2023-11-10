@@ -1,13 +1,15 @@
 package h05;
 
 import h05.model.*;
-import org.tudalgo.algoutils.student.test.;
+import org.tudalgo.algoutils.student.Student;
+import org.tudalgo.algoutils.student.test.StudentTestUtils;
 
 
 /**
  * Main entry point in executing the program.
  */
 public class Main {
+    private static double EPSILON = 10e-6;
 
     /**
      * Main entry point in executing the program.
@@ -23,14 +25,12 @@ public class Main {
         TotalCostRater totalCostRater = new TotalCostRater();
         desktop.rateBy(totalCostRater);
         System.out.println("Price: " + totalCostRater.getTotalCost());
-        //Price: 460.0
-        //checkExpect
+        StudentTestUtils.testWithinRange(460.0 - EPSILON, 460.0 + EPSILON, totalCostRater.getTotalCost());
 
 
         MachineLearningRater machineLearningRater = new MachineLearningRater();
         desktop.rateBy(machineLearningRater);
         System.out.println("Model speed: " + machineLearningRater.checkModel(3));
-        //Model speed: 2.6666666666666665
-        //checkExpect
+        StudentTestUtils.testWithinRange(2.65, 2.67, machineLearningRater.checkModel(3));
     }
 }
