@@ -33,10 +33,13 @@ public class Unchecked {
 
     @FunctionalInterface
     public interface UncheckedRunnable {
+
         void run() throws Throwable;
     }
+
     @FunctionalInterface
     public interface UncheckedSupplier<T> {
+
         T call() throws Throwable;
 
     }

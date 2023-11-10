@@ -90,7 +90,10 @@ public class H3_2 {
                     mainboard.addPeripheral(peripheral);
             },
             context,
-            (r) -> "Method `addCPU`, `addMemory` or `addPeripheral` in class `MainboardImpl` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Method `addCPU`, `addMemory` or `addPeripheral` in class `MainboardImpl` threw an exception.";
+            }
         );
 
         ComponentRater rater = Mockito.mock(ComponentRater.class);
@@ -102,7 +105,10 @@ public class H3_2 {
         Assertions2.call(
             () -> mainboard.rateBy(rater),
             context,
-            (r) -> "Method `rateBy` in class `MainboardImpl` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Method `rateBy` in class `MainboardImpl` threw an exception.";
+            }
         );
 
         Mockito.verify(rater).consumeMainboard(Mockito.same(mainboard));

@@ -69,7 +69,10 @@ public class H1_3 {
         var instance = Assertions2.callObject(
             () -> constructor.invoke(Socket.AM4, 1, 2.5D, 3.5D),
             Assertions2.emptyContext(),
-            (r) -> "Constructor `CPUImpl(Socket, int, double, double)` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Constructor `CPUImpl(Socket, int, double, double)` threw an exception.";
+            }
         );
 
         Assertions2.assertEquals(
@@ -149,7 +152,10 @@ public class H1_3 {
             Assertions2.callObject(
                 Unchecked.uncheckedObjectCallable(() -> getSocket.invoke(instance)),
                 Assertions2.emptyContext(),
-                (r) -> "Method `getSocket` in class `CPUImpl` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `getSocket` in class `CPUImpl` threw an exception.";
+                }
             ),
             Assertions2.emptyContext(),
             (r) -> "Method `getSocket` in class `CPUImpl` did not return the correct value."
@@ -160,7 +166,10 @@ public class H1_3 {
             Assertions2.callObject(
                 Unchecked.uncheckedObjectCallable(() -> getCores.invoke(instance)),
                 Assertions2.emptyContext(),
-                (r) -> "Method `getCores` in class `CPUImpl` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `getCores` in class `CPUImpl` threw an exception.";
+                }
             ),
             Assertions2.emptyContext(),
             (r) -> "Method `getCores` in class `CPUImpl` did not return the correct value."
@@ -171,7 +180,10 @@ public class H1_3 {
             Assertions2.callObject(
                 Unchecked.uncheckedObjectCallable(() -> getFrequency.invoke(instance)),
                 Assertions2.emptyContext(),
-                (r) -> "Method `getFrequency` in class `CPUImpl` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `getFrequency` in class `CPUImpl` threw an exception.";
+                }
             ),
             Assertions2.emptyContext(),
             (r) -> "Method `getFrequency` in class `CPUImpl` did not return the correct value."

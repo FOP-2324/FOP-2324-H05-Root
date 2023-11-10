@@ -34,7 +34,10 @@ public class H1_6 {
         var instance = Assertions2.callObject(
             () -> new TestComponent(3.1D),
             Assertions2.emptyContext(),
-            (r) -> "Constructor `PurchasedComponent(double)` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Constructor `PurchasedComponent(double)` threw an exception.";
+            }
         );
 
         Assertions2.assertEquals(
@@ -78,7 +81,10 @@ public class H1_6 {
             Assertions2.callObject(
                 Unchecked.uncheckedObjectCallable(() -> getPrice.invoke(instance)),
                 Assertions2.emptyContext(),
-                (r) -> "Method `getPrice()` in class `PurchasedComponent` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `getPrice()` in class `PurchasedComponent` threw an exception.";
+                }
             ),
             Assertions2.emptyContext(),
             (r) -> "Method `getPrice()` in class `PurchasedComponent` did not return the correct value."

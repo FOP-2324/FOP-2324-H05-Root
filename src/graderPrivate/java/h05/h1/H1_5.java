@@ -53,7 +53,10 @@ public class H1_5 {
         var instance = Assertions2.callObject(
             () -> constructor.invoke(PeripheralType.ETHERNET, 3.1D),
             Assertions2.emptyContext(),
-            (r) -> "Constructor `PeripheralImpl(char, double)` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Constructor `PeripheralImpl(char, double)` threw an exception.";
+            }
         );
 
         Assertions2.assertEquals(
@@ -97,7 +100,10 @@ public class H1_5 {
             Assertions2.callObject(
                 Unchecked.uncheckedObjectCallable(() -> getPeripheralType.invoke(instance)),
                 Assertions2.emptyContext(),
-                (r) -> "Method `getPeripheralType` in class `PeripheralImpl` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `getPeripheralType` in class `PeripheralImpl` threw an exception.";
+                }
             ),
             Assertions2.emptyContext(),
             (r) -> "Method `getPeripheralType` in class `PeripheralImpl` did not return the correct value."

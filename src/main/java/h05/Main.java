@@ -1,7 +1,11 @@
 package h05;
 
-import h05.model.*;
-import org.tudalgo.algoutils.student.Student;
+import h05.model.CPUImpl;
+import h05.model.MainboardImpl;
+import h05.model.MemoryImpl;
+import h05.model.PeripheralImpl;
+import h05.model.PeripheralType;
+import h05.model.Socket;
 import org.tudalgo.algoutils.student.test.StudentTestUtils;
 
 

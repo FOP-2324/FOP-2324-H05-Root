@@ -81,7 +81,10 @@ public class H3_3 {
             Assertions2.callObject(
                 rater::getTotalCost,
                 context,
-                (r) -> "Method `getTotalCost` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `getTotalCost` threw an exception.";
+                }
             ),
             context,
             (r) -> "TotalCostRater did not calculate the total price correctly."
@@ -123,7 +126,10 @@ public class H3_3 {
                 rater.consumePeripheral(componentWithCost(Peripheral.class, 5));
             },
             context,
-            (r) -> "Method `consumeCPU`, `consumeMainboard` or `consumePeripheral` in class `MachineLearningRater` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Method `consumeCPU`, `consumeMainboard` or `consumePeripheral` in class `MachineLearningRater` threw an exception.";
+            }
         );
 
         for (int i = 0; i < tpuCount; i++) {
@@ -133,7 +139,10 @@ public class H3_3 {
             Assertions2.call(
                 () -> rater.consumePeripheral(peripheral),
                 context,
-                (r) -> "Method `consumePeripheral` in class `MachineLearningRater` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `consumePeripheral` in class `MachineLearningRater` threw an exception.";
+                }
             );
         }
 
@@ -144,7 +153,10 @@ public class H3_3 {
             Assertions2.call(
                 () -> rater.consumePeripheral(peripheral),
                 context,
-                (r) -> "Method `consumePeripheral` in class `MachineLearningRater` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `consumePeripheral` in class `MachineLearningRater` threw an exception.";
+                }
             );
         }
 
@@ -155,14 +167,20 @@ public class H3_3 {
             Assertions2.call(
                 () -> rater.consumeMemory(memory),
                 context,
-                (r) -> "Method `consumeMemory` in class `MachineLearningRater` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `consumeMemory` in class `MachineLearningRater` threw an exception.";
+                }
             );
         }
 
         var result = Assertions2.callObject(
             () -> rater.checkModel(modelSize),
             context,
-            (r) -> "Method `checkModel` in class `MachineLearningRater` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Method `checkModel` in class `MachineLearningRater` threw an exception.";
+            }
         );
 
         Assertions2.assertEquals(

@@ -90,7 +90,10 @@ public class H2 {
         var instance = Assertions2.callObject(
             () -> constructor.invoke(Socket.AM4, 2, 4, 5.3D),
             Assertions2.emptyContext(),
-            (r) -> "Constructor `MainboardImpl(Socket, int, int, double)` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Constructor `MainboardImpl(Socket, int, int, double)` threw an exception.";
+            }
         );
 
         Assertions2.assertEquals(
@@ -164,7 +167,10 @@ public class H2 {
         var result = Assertions2.callObject(
             Unchecked.uncheckedObjectCallable(() -> addCPU.invoke(instance, argumentCpu)),
             context,
-            (r) -> "Method `addCPU(CPU)` in class `MainboardImpl` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Method `addCPU(CPU)` in class `MainboardImpl` threw an exception.";
+            }
         );
 
         boolean expectedResult = !cpuArgumentNull && cpuFieldNull && mainboardSocket == cpuArgSocket;
@@ -239,31 +245,34 @@ public class H2 {
         int nonNullCount = 0;
         for (Memory memory : memoryInstances) {
             var tempContext = Assertions2.contextBuilder()
-                    .add(context)
-                    .add("memory", memory)
-                    .add("index", nonNullCount)
-                    .build();
+                .add(context)
+                .add("memory", memory)
+                .add("index", nonNullCount)
+                .build();
 
             var result = Assertions2.callObject(
-                    Unchecked.uncheckedObjectCallable(() -> addMemory.invoke(instance, memory)),
-                    tempContext,
-                    (r) -> "Method `addMemory(Memory)` in class `MainboardImpl` threw an exception."
+                Unchecked.uncheckedObjectCallable(() -> addMemory.invoke(instance, memory)),
+                tempContext,
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `addMemory(Memory)` in class `MainboardImpl` threw an exception.";
+                }
             );
 
             boolean expectedResult = memory != null && nonNullCount < memorySlots;
             Assertions2.assertEquals(
-                    expectedResult,
-                    result,
-                    tempContext,
-                    (r) -> "Method `addMemory(Memory)` in class `MainboardImpl` did not return the correct value."
+                expectedResult,
+                result,
+                tempContext,
+                (r) -> "Method `addMemory(Memory)` in class `MainboardImpl` did not return the correct value."
             );
 
             if (memorySlots > 0 && nonNullCount < memorySlots) {
                 Assertions2.assertSame(
-                        memory,
-                        memoriesArray[nonNullCount],
-                        tempContext,
-                        (r) -> "Method `addMemory(Memory)` in class `MainboardImpl` did not set the `memories` field correctly."
+                    memory,
+                    memoriesArray[nonNullCount],
+                    tempContext,
+                    (r) -> "Method `addMemory(Memory)` in class `MainboardImpl` did not set the `memories` field correctly."
                 );
             }
 
@@ -326,31 +335,34 @@ public class H2 {
         int nonNullCount = 0;
         for (Peripheral peripheral : peripheralInstances) {
             var tempContext = Assertions2.contextBuilder()
-                    .add(context)
-                    .add("peripheral", peripheral)
-                    .add("index", nonNullCount)
-                    .build();
+                .add(context)
+                .add("peripheral", peripheral)
+                .add("index", nonNullCount)
+                .build();
 
             var result = Assertions2.callObject(
-                    Unchecked.uncheckedObjectCallable(() -> addPeripheral.invoke(instance, peripheral)),
-                    tempContext,
-                    (r) -> "Method `addPeripheral(Peripheral)` in class `MainboardImpl` threw an exception."
+                Unchecked.uncheckedObjectCallable(() -> addPeripheral.invoke(instance, peripheral)),
+                tempContext,
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `addPeripheral(Peripheral)` in class `MainboardImpl` threw an exception.";
+                }
             );
 
             boolean expectedResult = peripheral != null && nonNullCount < peripheralSlots;
             Assertions2.assertEquals(
-                    expectedResult,
-                    result,
-                    tempContext,
-                    (r) -> "Method `addPeripheral(Peripheral)` in class `MainboardImpl` did not return the correct value."
+                expectedResult,
+                result,
+                tempContext,
+                (r) -> "Method `addPeripheral(Peripheral)` in class `MainboardImpl` did not return the correct value."
             );
 
             if (peripheralSlots > 0 && nonNullCount < peripheralSlots) {
                 Assertions2.assertSame(
-                        peripheral,
-                        peripheralsArray[nonNullCount],
-                        tempContext,
-                        (r) -> "Method `addPeripheral(Peripheral)` in class `MainboardImpl` did not set the `peripherals` field correctly."
+                    peripheral,
+                    peripheralsArray[nonNullCount],
+                    tempContext,
+                    (r) -> "Method `addPeripheral(Peripheral)` in class `MainboardImpl` did not set the `peripherals` field correctly."
                 );
             }
 

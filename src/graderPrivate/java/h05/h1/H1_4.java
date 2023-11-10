@@ -52,7 +52,10 @@ public class H1_4 {
         var instance = Assertions2.callObject(
             () -> constructor.invoke('a', 3.1D),
             Assertions2.emptyContext(),
-            (r) -> "Constructor `MemoryImpl(char, double)` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Constructor `MemoryImpl(char, double)` threw an exception.";
+            }
         );
 
         Assertions2.assertEquals(
@@ -96,7 +99,10 @@ public class H1_4 {
             Assertions2.callObject(
                 Unchecked.uncheckedObjectCallable(() -> getCapacity.invoke(instance)),
                 Assertions2.emptyContext(),
-                (r) -> "Method `getCapacity` in class `MemoryImpl` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `getCapacity` in class `MemoryImpl` threw an exception.";
+                }
             ),
             Assertions2.emptyContext(),
             (r) -> "Method `getCapacity` in class `MemoryImpl` did not return the correct value."

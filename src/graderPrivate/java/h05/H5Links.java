@@ -340,6 +340,18 @@ public class H5Links {
         (r) -> "Method `addMainboard` not found in class `ServerCenter`."
     );
 
+    // Class Main
+    public static final Supplier<TypeLink> MAIN_LINK = () -> Assertions2.assertNotNull(
+        H05_PACKAGE_LINK.get().getType(identical("Main")),
+        Assertions2.emptyContext(),
+        (r) -> "Class `Main` does not exist."
+    );
+    public static final Supplier<MethodLink> MAIN_MAIN_METHOD_LINK = () -> Assertions2.assertNotNull(
+        MAIN_LINK.get().getMethod(identical("main")),
+        Assertions2.emptyContext(),
+        (r) -> "Method `main` not found in class `Main`."
+    );
+
     private static class PackageLinkSupplier implements Supplier<PackageLink> {
 
         private final String name;

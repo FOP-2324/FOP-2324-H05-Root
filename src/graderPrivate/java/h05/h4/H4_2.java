@@ -56,13 +56,19 @@ public class H4_2 {
         var instance = Assertions2.callObject(
             () -> constructor.invoke(costPerGigaByte),
             context,
-            (r) -> "Constructor `VirtualMemory(double)` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Constructor `VirtualMemory(double)` threw an exception.";
+            }
         );
 
         Assertions2.call(
             Unchecked.uncheckedCallable(() -> setCapacity.invoke(instance, (char) capacity)),
             context,
-            (r) -> "Method `setCapacity(char)` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Method `setCapacity(char)` threw an exception.";
+            }
         );
 
         Assertions2.assertEquals(
@@ -70,7 +76,10 @@ public class H4_2 {
             Assertions2.callObject(
                 Unchecked.uncheckedObjectCallable(() -> getCapacity.invoke(instance)),
                 context,
-                (r) -> "Method `getCapacity()` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `getCapacity()` threw an exception.";
+                }
             ),
             context,
             (r) -> "Method `setCapacity(char)` did not save the capacity correctly."
@@ -81,7 +90,10 @@ public class H4_2 {
             Assertions2.callObject(
                 Unchecked.uncheckedObjectCallable(() -> getPrice.invoke(instance)),
                 context,
-                (r) -> "Method `getPrice()` threw an exception."
+                (r) -> {
+                    r.cause().printStackTrace();
+                    return "Method `getPrice()` threw an exception.";
+                }
             ),
             context,
             (r) -> "Constructor `VirtualMemory(double)` did not set the `price` field correctly."

@@ -45,7 +45,8 @@ public class H4_3 {
             .mapToObj(i -> {
                 Mainboard mainboard = Mockito.mock(Mainboard.class);
                 Mockito.doNothing().when(mainboard).rateBy(Mockito.any());
-                return mainboard;})
+                return mainboard;
+            })
             .toList();
 
         var raterInstance = Mockito.mock(ComponentRater.class);
@@ -58,13 +59,19 @@ public class H4_3 {
                 }
             }),
             Assertions2.emptyContext(),
-            (r) -> "Method `addMainboard(Mainboard)` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Method `addMainboard(Mainboard)` threw an exception.";
+            }
         );
 
         Assertions2.call(
             Unchecked.uncheckedCallable(() -> rateBy.invoke(instance, raterInstance)),
             Assertions2.emptyContext(),
-            (r) -> "Method `rateBy(ComponentRater)` threw an exception."
+            (r) -> {
+                r.cause().printStackTrace();
+                return "Method `rateBy(ComponentRater)` threw an exception.";
+            }
         );
 
         for (Mainboard mainboard : mainboards) {
