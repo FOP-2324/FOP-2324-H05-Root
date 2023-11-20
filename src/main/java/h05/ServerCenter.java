@@ -10,19 +10,21 @@ import java.util.ArrayList;
  */
 public class ServerCenter implements Configuration {
 
-    ArrayList<Mainboard> mainboards = new ArrayList<>();
+    private int nextFreeSlot = 0;
+    private final Mainboard[] mainboards = new Mainboard[10000];
 
     /**
      * Adds a {@link Mainboard} to the server center
      * @param mainboard specific {@link Mainboard} which gets included
      */
     public void addMainboard(Mainboard mainboard){
-        mainboards.add(mainboard);
+        mainboards[nextFreeSlot++] = mainboard;
     }
 
     @Override
     public void rateBy(ComponentRater rater) {
-        for(Mainboard mainboard : mainboards){
+        for(int i = 0; i < nextFreeSlot; i++){
+            Mainboard mainboard = mainboards[i];
             mainboard.rateBy(rater);
         }
     }
