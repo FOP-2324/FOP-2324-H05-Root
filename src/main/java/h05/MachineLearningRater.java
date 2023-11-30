@@ -38,7 +38,7 @@ public class MachineLearningRater implements ComponentRater {
      * @return score of System
      */
     public double checkModel(int modelSize){
-        double tpu_fac = 100 - (100 - 1) * Math.pow(1.02, tpuCount);
+        double tpu_fac = 100 - (100 - 1) * Math.pow(1.02, -tpuCount);
         double memory = (double) memorySize / modelSize;
 
         return memory * tpu_fac;

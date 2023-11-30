@@ -1,4 +1,4 @@
-package h05.model;
+package h05;
 
 import h05.ComponentRater;
 
