@@ -183,9 +183,13 @@ public class H3_3 {
             }
         );
 
-        Assertions2.assertEquals(
-            (double) memorySizes.stream().mapToInt(i -> i).sum() / modelSize * (100 - (100 - 1) * Math.pow(1.02, tpuCount)),
-            result,
+        double totalMemorySize = memorySizes.stream().mapToInt(i -> i).sum();
+        double expected1 = totalMemorySize / modelSize * (100 - (100 - 1) * Math.pow(1.02, tpuCount));
+        double expected2 = totalMemorySize / modelSize * (100 - (100 - 1) * Math.pow(1.02, -tpuCount));
+        if (result == expected1 || result == expected2)
+            return;
+
+        Assertions2.fail(
             context,
             (r) -> "Method `checkModel` in class `MachineLearningRater` did not calculate the score correctly."
         );

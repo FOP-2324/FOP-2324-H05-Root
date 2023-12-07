@@ -166,11 +166,11 @@ public class H1_3 {
                 Assertions2.emptyContext(),
                 (r) -> {
                     r.cause().printStackTrace();
-                    return "Method `getCores` in class `CPUImpl` threw an exception.";
+                    return "Method `getCores/getNumberOfCores` in class `CPUImpl` threw an exception.";
                 }
             ),
             Assertions2.emptyContext(),
-            (r) -> "Method `getCores` in class `CPUImpl` did not return the correct value."
+            (r) -> "Method `getCores/getNumberOfCores` in class `CPUImpl` did not return the correct value."
         );
 
         Assertions2.assertEquals(

@@ -403,8 +403,11 @@ public class H2 {
             return socket;
         }
 
-        @Override
         public int getCores() {
+            return 0;
+        }
+
+        public int getNumberOfCores() {
             return 0;
         }
 

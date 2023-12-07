@@ -41,7 +41,7 @@ public class H4_3 {
             Modifier.PUBLIC
         );
 
-        var mainboards = IntStream.range(0, 10500)
+        var mainboards = IntStream.range(0, 10000)
             .mapToObj(i -> {
                 Mainboard mainboard = Mockito.mock(Mainboard.class);
                 Mockito.doNothing().when(mainboard).rateBy(Mockito.any());

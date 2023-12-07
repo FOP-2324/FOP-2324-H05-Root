@@ -57,9 +57,9 @@ public class H5Links {
         (r) -> "Method `getSocket` not found in interface `CPU`."
     );
     public static final Supplier<MethodLink> CPU_GET_CORES_METHOD_LINK = () -> Assertions2.assertNotNull(
-        CPU_LINK.get().getMethod(identical("getCores")),
+        CPU_LINK.get().getMethod(identical("getCores").or(identical("getNumberOfCores"))),
         Assertions2.emptyContext(),
-        (r) -> "Method `getCores` not found in interface `CPU`."
+        (r) -> "Method `getCores/getNumberOfCores` not found in interface `CPU`."
     );
     public static final Supplier<MethodLink> CPU_GET_FREQUENCY_METHOD_LINK = () -> Assertions2.assertNotNull(
         CPU_LINK.get().getMethod(identical("getFrequency")),
@@ -275,7 +275,7 @@ public class H5Links {
 
     // Interface Configuration
     public static final Supplier<TypeLink> CONFIGURATION_LINK = () -> Assertions2.assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(identical("Configuration")),
+        H05_PACKAGE_LINK.get().getType(identical("Configuration")),
         Assertions2.emptyContext(),
         (r) -> "Interface `Configuration` does not exist."
     );
