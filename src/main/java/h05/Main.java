@@ -30,8 +30,8 @@ public class Main {
 
         TotalCostRater totalCostRater = new TotalCostRater();
         desktop.rateBy(totalCostRater);
-        System.out.println("Price: " + totalCostRater.getTotalCost());
-        StudentTestUtils.testWithinRange(760.0 - EPSILON, 760 + EPSILON, totalCostRater.getTotalCost());
+        System.out.println("Price: " + totalCostRater.getTotalPrice());
+        StudentTestUtils.testWithinRange(760.0 - EPSILON, 760 + EPSILON, totalCostRater.getTotalPrice());
 
 
         MachineLearningRater machineLearningRater = new MachineLearningRater();

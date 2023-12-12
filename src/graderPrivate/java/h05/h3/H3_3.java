@@ -42,13 +42,13 @@ public class H3_3 {
     public void testTotalCostRater(double mainboardPrice, double cpuPrice, double memoryPrice, double peripheralPrice) {
         TypeLink totalCostRater = H5Links.TOTAL_COST_RATER_LINK.get();
         TypeLink componentRater = H5Links.COMPONENT_RATER_LINK.get();
-        MethodLink getTotalCost = H5Links.TOTAL_COST_RATER_GET_TOTAL_COST_METHOD_LINK.get();
+        MethodLink getTotalPrice = H5Links.TOTAL_COST_RATER_GET_TOTAL_PRICE_METHOD_LINK.get();
 
         H5Utils.assertCorrectModifiers(totalCostRater, Modifier.PUBLIC);
         H5Utils.assertCorrectInterfaces(totalCostRater, componentRater);
 
         H5Utils.assertMethodCorrect(
-            getTotalCost,
+            getTotalPrice,
             BasicTypeLink.of(double.class),
             Modifier.PUBLIC
         );
@@ -79,11 +79,11 @@ public class H3_3 {
         Assertions2.assertEquals(
             totalPrice,
             Assertions2.callObject(
-                rater::getTotalCost,
+                () -> getTotalPrice.invoke(rater),
                 context,
                 (r) -> {
                     r.cause().printStackTrace();
-                    return "Method `getTotalCost` threw an exception.";
+                    return "Method `getTotalPrice` threw an exception.";
                 }
             ),
             context,

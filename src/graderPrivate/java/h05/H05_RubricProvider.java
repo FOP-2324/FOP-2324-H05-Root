@@ -10,6 +10,7 @@ import h05.h2.H2;
 import h05.h3.H3_1;
 import h05.h3.H3_2;
 import h05.h3.H3_3;
+import h05.h4.H4_1;
 import h05.h4.H4_2;
 import h05.h4.H4_3;
 import h05.model.CPU;
@@ -62,27 +63,21 @@ public class H05_RubricProvider implements RubricProvider {
                     Criterion.builder()
                         .shortDescription("H1.4 | `Memory` modellieren")
                         .addChildCriteria(
-                            criterion("Interface `Memory` ist korrekt und wird in `MemoryImpl` verwendet.",
-                                JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testMemoryInterface"))),
-                            criterion("Konstruktor und Objektkonstanten von `MemoryImpl` sind korrekt und Methoden von `Memory` sind korrekt in `MemoryImpl` implementiert.",
-                                JUnitTestRef.and(
-                                    JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testMemoryImplConstructor")),
-                                    JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testMemoryImplFields")),
-                                    JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testGetCapacity"))
-                                )
+                            criterion("Interface `Memory` und Klasse `MemoryImpl` sind korrekt.",
+                                JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testMemoryInterface")),
+                                JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testMemoryImplConstructor")),
+                                JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testMemoryImplFields")),
+                                JUnitTestRef.ofMethod(() -> H1_4.class.getDeclaredMethod("testGetCapacity"))
                             )
                         ).build(),
                     Criterion.builder()
                         .shortDescription("H1.5 | `Peripheral` modellieren")
                         .addChildCriteria(
-                            criterion("Interface `Peripheral` ist korrekt und wird in `PeripheralImpl` verwendet.",
-                                JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testPeripheralInterface"))),
-                            criterion("Konstruktor und Objektkonstanten von `PeripheralImpl` sind korrekt und Methoden von `Peripheral` sind korrekt in `PeripheralImpl` implementiert.",
-                                JUnitTestRef.and(
-                                    JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testPeripheralImplConstructor")),
-                                    JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testPeripheralImplFields")),
-                                    JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testGetPeripheralType"))
-                                )
+                            criterion("Interface `Peripheral` und Klasse `PeripheralImpl` sind korrekt.",
+                                JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testPeripheralInterface")),
+                                JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testPeripheralImplConstructor")),
+                                JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testPeripheralImplFields")),
+                                JUnitTestRef.ofMethod(() -> H1_5.class.getDeclaredMethod("testGetPeripheralType"))
                             )
                         ).build(),
                     Criterion.builder()
@@ -153,6 +148,10 @@ public class H05_RubricProvider implements RubricProvider {
                     Criterion.builder()
                         .shortDescription("H4.1 | Explizite Konfiguration testen")
                         .addChildCriteria(
+                            criterion("Die Konfiguration wurde wie gefordert korrekt erstellt",
+                                JUnitTestRef.ofMethod(() -> H4_1.class.getDeclaredMethod("testConfigurationCorrect"))),
+                            criterion("Die Konfiguration wird mit `testWithinRange` getestet",
+                                JUnitTestRef.ofMethod(() -> H4_1.class.getDeclaredMethod("testTestMethodsUsed")))
                         ).build(),
                     Criterion.builder()
                         .shortDescription("H4.2 | Klasse `VirtualMemory`")

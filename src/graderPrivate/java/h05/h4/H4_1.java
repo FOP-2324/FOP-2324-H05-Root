@@ -305,7 +305,7 @@ public class H4_1 {
                 (r) -> "Exactly one instance of `MachineLearningRater` should be instantiated."
             );
 
-            Mockito.verify(totalCostRaterMock.constructed().get(0), Mockito.atLeast(1)).getTotalCost();
+            Mockito.verify(totalCostRaterMock.constructed().get(0), Mockito.atLeast(1)).getTotalPrice();
             Mockito.verify(machineLearningRaterMock.constructed().get(0), Mockito.atLeast(1)).checkModel(Mockito.anyInt());
 
             staticMock.verify(() -> StudentTestUtils.testWithinRange(Mockito.anyDouble(), Mockito.anyDouble(), ArgumentMatchers.doubleThat(d -> 759 <= d && d <= 761)));

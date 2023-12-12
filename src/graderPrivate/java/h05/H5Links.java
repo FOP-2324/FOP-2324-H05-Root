@@ -291,10 +291,10 @@ public class H5Links {
         Assertions2.emptyContext(),
         (r) -> "Class `TotalCostRater` does not exist."
     );
-    public static final Supplier<MethodLink> TOTAL_COST_RATER_GET_TOTAL_COST_METHOD_LINK = () -> Assertions2.assertNotNull(
-        TOTAL_COST_RATER_LINK.get().getMethod(identical("getTotalCost")),
+    public static final Supplier<MethodLink> TOTAL_COST_RATER_GET_TOTAL_PRICE_METHOD_LINK = () -> Assertions2.assertNotNull(
+        TOTAL_COST_RATER_LINK.get().getMethod(identical("getTotalPrice")),
         Assertions2.emptyContext(),
-        (r) -> "Method `getTotalCost` not found in class `TotalCostRater`."
+        (r) -> "Method `getTotalPrice` not found in class `TotalCostRater`."
     );
 
     // Class MachineLearningRater
