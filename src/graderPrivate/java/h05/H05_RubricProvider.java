@@ -18,6 +18,7 @@ import h05.model.Memory;
 import h05.model.Peripheral;
 import h05.model.Socket;
 import org.sourcegrade.jagr.api.rubric.Criterion;
+import org.sourcegrade.jagr.api.rubric.GradeResult;
 import org.sourcegrade.jagr.api.rubric.JUnitTestRef;
 import org.sourcegrade.jagr.api.rubric.Rubric;
 import org.sourcegrade.jagr.api.rubric.RubricProvider;
@@ -25,6 +26,7 @@ import org.sourcegrade.jagr.api.rubric.RubricProvider;
 import java.util.List;
 
 import static org.tudalgo.algoutils.tutor.general.jagr.RubricUtils.criterion;
+import static org.tudalgo.algoutils.tutor.general.jagr.RubricUtils.defaultCriterionBuilder;
 
 public class H05_RubricProvider implements RubricProvider {
 
@@ -170,9 +172,22 @@ public class H05_RubricProvider implements RubricProvider {
                                 JUnitTestRef.ofMethod(() -> H4_3.class.getDeclaredMethod("testAddMainboardAndRateBy")),
                                 2)
                         ).build()
+                ).build(),
+            Criterion.builder()
+                .shortDescription("Global")
+                .addChildCriteria(
+                    defaultCriterionBuilder("Alle Elemente sind korrekt dokumentiert.")
+                        .minPoints(-3)
+                        .maxPoints(0)
+                        .grader((dc, c) -> GradeResult.of(-3, 0, "This criterion will be graded manually."))
+                        .build(),
+                    defaultCriterionBuilder("Alle Identifier sind korrekt.")
+                        .minPoints(-3)
+                        .maxPoints(0)
+                        .grader((dc, c) -> GradeResult.of(-3, 0, "This criterion will be graded manually."))
+                        .build()
                 ).build()
-        )
-        .build();
+        ).build();
 
     @Override
     public Rubric getRubric() {
