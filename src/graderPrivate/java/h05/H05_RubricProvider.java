@@ -172,20 +172,6 @@ public class H05_RubricProvider implements RubricProvider {
                                 JUnitTestRef.ofMethod(() -> H4_3.class.getDeclaredMethod("testAddMainboardAndRateBy")),
                                 2)
                         ).build()
-                ).build(),
-            Criterion.builder()
-                .shortDescription("Global")
-                .addChildCriteria(
-                    defaultCriterionBuilder("Alle Elemente sind korrekt dokumentiert.")
-                        .minPoints(-3)
-                        .maxPoints(0)
-                        .grader((dc, c) -> GradeResult.of(-3, 0, "This criterion will be graded manually."))
-                        .build(),
-                    defaultCriterionBuilder("Alle Identifier sind korrekt.")
-                        .minPoints(-3)
-                        .maxPoints(0)
-                        .grader((dc, c) -> GradeResult.of(-3, 0, "This criterion will be graded manually."))
-                        .build()
                 ).build()
         ).build();
 
