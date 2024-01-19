@@ -3,7 +3,6 @@ package h05.h1;
 import h05.H5Links;
 import h05.H5Utils;
 import h05.Unchecked;
-import h05.model.PeripheralType;
 import org.junit.jupiter.api.Test;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
@@ -14,6 +13,7 @@ import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.Modifier;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 
+import static h05.Global.peripheralTypeMapping;
 import static h05.H5Utils.toStringifiable;
 
 @TestForSubmission
@@ -51,7 +51,7 @@ public class H1_5 {
         );
 
         var instance = Assertions2.callObject(
-            () -> constructor.invoke(PeripheralType.ETHERNET, 3.1D),
+            () -> constructor.invoke(peripheralTypeMapping("ETHERNET"), 3.1D),
             Assertions2.emptyContext(),
             (r) -> {
                 r.cause().printStackTrace();
@@ -60,7 +60,7 @@ public class H1_5 {
         );
 
         Assertions2.assertEquals(
-            PeripheralType.ETHERNET,
+            peripheralTypeMapping("ETHERNET"),
             H5Links.PERIPHERAL_IMPL_PERIPHERAL_TYPE_FIELD_LINK.get().get(instance),
             Assertions2.emptyContext(),
             (r) -> "Constructor `PeripheralImpl(char, double)` did not set the `peripheralType` field correctly."
@@ -91,10 +91,10 @@ public class H1_5 {
             (r) -> "Could not instantiate class `PeripheralImpl`."
         );
 
-        H5Links.PERIPHERAL_IMPL_PERIPHERAL_TYPE_FIELD_LINK.get().set(instance, PeripheralType.ETHERNET);
+        H5Links.PERIPHERAL_IMPL_PERIPHERAL_TYPE_FIELD_LINK.get().set(instance, peripheralTypeMapping("ETHERNET"));
 
         Assertions2.assertEquals(
-            PeripheralType.ETHERNET,
+            peripheralTypeMapping("ETHERNET"),
             Assertions2.callObject(
                 Unchecked.uncheckedObjectCallable(() -> getPeripheralType.invoke(instance)),
                 Assertions2.emptyContext(),

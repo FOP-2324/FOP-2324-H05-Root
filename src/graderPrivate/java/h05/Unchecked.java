@@ -3,6 +3,7 @@ package h05;
 import org.tudalgo.algoutils.tutor.general.callable.Callable;
 import org.tudalgo.algoutils.tutor.general.callable.ObjectCallable;
 
+@SuppressWarnings("unchecked")
 public class Unchecked {
 
     public static <T extends Throwable> void propagate(Throwable t) throws T {

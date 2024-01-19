@@ -2,23 +2,17 @@ package h05.h3;
 
 import h05.H5Links;
 import h05.H5Utils;
-import h05.MachineLearningRater;
-import h05.TotalCostRater;
-import h05.model.CPU;
-import h05.model.Component;
-import h05.model.Mainboard;
-import h05.model.Memory;
-import h05.model.Peripheral;
-import h05.model.PeripheralType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
+import org.tudalgo.algoutils.tutor.general.match.Matcher;
 import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
 import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.Modifier;
@@ -27,6 +21,8 @@ import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import static h05.Global.peripheralTypeMapping;
 
 @TestForSubmission
 public class H3_3 {
@@ -39,7 +35,7 @@ public class H3_3 {
         "1, 1, 1, 1",
         "510.12, 12666.6, 65.32, 12.2"
     })
-    public void testTotalCostRater(double mainboardPrice, double cpuPrice, double memoryPrice, double peripheralPrice) {
+    public void testTotalCostRater(double mainboardPrice, double cpuPrice, double memoryPrice, double peripheralPrice) throws Throwable {
         TypeLink totalCostRater = H5Links.TOTAL_COST_RATER_LINK.get();
         TypeLink componentRater = H5Links.COMPONENT_RATER_LINK.get();
         MethodLink getTotalPrice = H5Links.TOTAL_COST_RATER_GET_TOTAL_PRICE_METHOD_LINK.get();
@@ -60,19 +56,25 @@ public class H3_3 {
             .add("peripheralPrice", peripheralPrice)
             .build();
 
-        TotalCostRater rater = new TotalCostRater();
+        Object rater = H5Links.TOTAL_COST_RATER_LINK.get()
+            .getConstructor(Matcher.of(constructorLink -> constructorLink.typeList().isEmpty()))
+            .invoke();
 
         double totalPrice = 0;
-        rater.consumeMainboard(componentWithCost(Mainboard.class, mainboardPrice));
+        H5Links.COMPONENT_RATER_CONSUME_MAINBOARD_METHOD_LINK.get()
+            .invoke(rater, componentWithCost(H5Links.MAINBOARD_LINK.get().reflection(), mainboardPrice));
         totalPrice += mainboardPrice;
-        rater.consumeCPU(componentWithCost(CPU.class, cpuPrice));
+        H5Links.COMPONENT_RATER_CONSUME_CPU_METHOD_LINK.get()
+            .invoke(rater, componentWithCost(H5Links.CPU_LINK.get().reflection(), cpuPrice));
         totalPrice += cpuPrice;
         for (int i = 0; i < 5; i++) {
-            rater.consumeMemory(componentWithCost(Memory.class, i * memoryPrice));
+            H5Links.COMPONENT_RATER_CONSUME_MEMORY_METHOD_LINK.get()
+                .invoke(rater, componentWithCost(H5Links.MEMORY_LINK.get().reflection(), i * memoryPrice));
             totalPrice += i * memoryPrice;
         }
         for (int i = 0; i < 5; i++) {
-            rater.consumePeripheral(componentWithCost(Peripheral.class, i * peripheralPrice));
+            H5Links.COMPONENT_RATER_CONSUME_PERIPHERAL_METHOD_LINK.get()
+                .invoke(rater, componentWithCost(H5Links.PERIPHERAL_LINK.get().reflection(), i * peripheralPrice));
             totalPrice += i * peripheralPrice;
         }
 
@@ -101,7 +103,7 @@ public class H3_3 {
 
     @ParameterizedTest
     @MethodSource("generateMachineLearningRaterArgs")
-    public void testMachineLearningRaterCheckModel(int modelSize, List<Character> memorySizes, int tpuCount, int nonTpuCount) {
+    public void testMachineLearningRaterCheckModel(int modelSize, List<Character> memorySizes, int tpuCount, int nonTpuCount) throws Throwable {
         MethodLink checkModel = H5Links.MACHINE_LEARNING_RATER_CHECK_MODEL_METHOD_LINK.get();
 
         H5Utils.assertMethodCorrect(
@@ -118,12 +120,17 @@ public class H3_3 {
             .add("nonTpuCount", nonTpuCount)
             .build();
 
-        MachineLearningRater rater = new MachineLearningRater();
+        Object rater = H5Links.MACHINE_LEARNING_RATER_LINK.get()
+            .getConstructor(Matcher.of(constructorLink -> constructorLink.typeList().isEmpty()))
+            .invoke();
 
         Assertions2.call(() -> {
-                rater.consumeCPU(componentWithCost(CPU.class, 5));
-                rater.consumeMainboard(componentWithCost(Mainboard.class, 5));
-                rater.consumePeripheral(componentWithCost(Peripheral.class, 5));
+                H5Links.COMPONENT_RATER_CONSUME_CPU_METHOD_LINK.get()
+                    .invoke(rater, componentWithCost(H5Links.CPU_LINK.get().reflection(), 5));
+                H5Links.COMPONENT_RATER_CONSUME_MAINBOARD_METHOD_LINK.get()
+                    .invoke(rater, componentWithCost(H5Links.MAINBOARD_LINK.get().reflection(), 5));
+                H5Links.COMPONENT_RATER_CONSUME_PERIPHERAL_METHOD_LINK.get()
+                    .invoke(rater, componentWithCost(H5Links.PERIPHERAL_LINK.get().reflection(), 5));
             },
             context,
             (r) -> {
@@ -133,11 +140,16 @@ public class H3_3 {
         );
 
         for (int i = 0; i < tpuCount; i++) {
-            Peripheral peripheral = Mockito.mock(Peripheral.class);
-            Mockito.when(peripheral.getPeripheralType()).thenReturn(PeripheralType.TPU);
+            Object peripheral = Mockito.mock(H5Links.PERIPHERAL_LINK.get().reflection(), (Answer<?>) invocationOnMock -> {
+                if (invocationOnMock.getMethod().equals(H5Links.PERIPHERAL_GET_PERIPHERAL_TYPE_METHOD_LINK.get().reflection())) {
+                    return peripheralTypeMapping("TPU");
+                } else {
+                    return Mockito.RETURNS_DEFAULTS.answer(invocationOnMock);
+                }
+            });
 
             Assertions2.call(
-                () -> rater.consumePeripheral(peripheral),
+                () -> H5Links.COMPONENT_RATER_CONSUME_PERIPHERAL_METHOD_LINK.get().invoke(rater, peripheral),
                 context,
                 (r) -> {
                     r.cause().printStackTrace();
@@ -147,11 +159,16 @@ public class H3_3 {
         }
 
         for (int i = 0; i < nonTpuCount; i++) {
-            Peripheral peripheral = Mockito.mock(Peripheral.class);
-            Mockito.when(peripheral.getPeripheralType()).thenReturn(PeripheralType.GPU);
+            Object peripheral = Mockito.mock(H5Links.PERIPHERAL_LINK.get().reflection(), (Answer<?>) invocationOnMock -> {
+                if (invocationOnMock.getMethod().equals(H5Links.PERIPHERAL_GET_PERIPHERAL_TYPE_METHOD_LINK.get().reflection())) {
+                    return peripheralTypeMapping("GPU");
+                } else {
+                    return Mockito.RETURNS_DEFAULTS.answer(invocationOnMock);
+                }
+            });
 
             Assertions2.call(
-                () -> rater.consumePeripheral(peripheral),
+                () -> H5Links.COMPONENT_RATER_CONSUME_PERIPHERAL_METHOD_LINK.get().invoke(rater, peripheral),
                 context,
                 (r) -> {
                     r.cause().printStackTrace();
@@ -161,11 +178,16 @@ public class H3_3 {
         }
 
         for (Character c : memorySizes) {
-            Memory memory = Mockito.mock(Memory.class);
-            Mockito.when(memory.getCapacity()).thenReturn(c);
+            Object memory = Mockito.mock(H5Links.MEMORY_LINK.get().reflection(), (Answer<?>) invocationOnMock -> {
+                if (invocationOnMock.getMethod().equals(H5Links.MEMORY_GET_CAPACITY_METHOD_LINK.get().reflection())) {
+                    return c;
+                } else {
+                    return Mockito.RETURNS_DEFAULTS.answer(invocationOnMock);
+                }
+            });
 
             Assertions2.call(
-                () -> rater.consumeMemory(memory),
+                () -> H5Links.COMPONENT_RATER_CONSUME_MEMORY_METHOD_LINK.get().invoke(rater, memory),
                 context,
                 (r) -> {
                     r.cause().printStackTrace();
@@ -174,8 +196,8 @@ public class H3_3 {
             );
         }
 
-        var result = Assertions2.callObject(
-            () -> rater.checkModel(modelSize),
+        Double result = Assertions2.callObject(
+            () -> H5Links.MACHINE_LEARNING_RATER_CHECK_MODEL_METHOD_LINK.get().invoke(rater, modelSize),
             context,
             (r) -> {
                 r.cause().printStackTrace();
@@ -195,10 +217,14 @@ public class H3_3 {
         );
     }
 
-    private static <T extends Component> T componentWithCost(Class<T> clazz, double price) {
-        T component = Mockito.mock(clazz);
-        Mockito.when(component.getPrice()).thenReturn(price);
-        return component;
+    private static <T> T componentWithCost(Class<T> clazz, double price) {
+        return Mockito.mock(clazz, (Answer<?>) invocationOnMock -> {
+            if (invocationOnMock.getMethod().equals(H5Links.COMPONENT_GET_PRICE_METHOD_LINK.get().reflection())) {
+                return price;
+            } else {
+                return Mockito.RETURNS_DEFAULTS.answer(invocationOnMock);
+            }
+        });
     }
 
     public static List<Arguments> generateMachineLearningRaterArgs() {

@@ -208,6 +208,7 @@ public class H5Utils {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T createUnsafeInstance(Class<?> c) {
         try {
             Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");

@@ -1,11 +1,6 @@
 package h05;
 
-import h05.h1.H1_1;
-import h05.h1.H1_2;
-import h05.h1.H1_3;
-import h05.h1.H1_4;
-import h05.h1.H1_5;
-import h05.h1.H1_6;
+import h05.h1.*;
 import h05.h2.H2;
 import h05.h3.H3_1;
 import h05.h3.H3_2;
@@ -13,20 +8,15 @@ import h05.h3.H3_3;
 import h05.h4.H4_1;
 import h05.h4.H4_2;
 import h05.h4.H4_3;
-import h05.model.CPU;
-import h05.model.Memory;
-import h05.model.Peripheral;
-import h05.model.Socket;
 import org.sourcegrade.jagr.api.rubric.Criterion;
-import org.sourcegrade.jagr.api.rubric.GradeResult;
 import org.sourcegrade.jagr.api.rubric.JUnitTestRef;
 import org.sourcegrade.jagr.api.rubric.Rubric;
 import org.sourcegrade.jagr.api.rubric.RubricProvider;
+import org.sourcegrade.jagr.api.testing.TestCycle;
 
 import java.util.List;
 
 import static org.tudalgo.algoutils.tutor.general.jagr.RubricUtils.criterion;
-import static org.tudalgo.algoutils.tutor.general.jagr.RubricUtils.defaultCriterionBuilder;
 
 public class H05_RubricProvider implements RubricProvider {
 
@@ -88,7 +78,7 @@ public class H05_RubricProvider implements RubricProvider {
                             criterion("Klasse `PurchasedComponent` korrekt definiert und implementiert `Component`.",
                                 JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testClassCorrect"))),
                             criterion("Konstruktor ist korrekt.",
-                                JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testConstructor"))),
+                                JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testConstructor", TestCycle.class))),
                             criterion("Objektkonstante `price` und Methode `getPrice` sind korrekt.",
                                 JUnitTestRef.ofMethod(() -> H1_6.class.getDeclaredMethod("testFieldAndGetter"))),
                             criterion("`CPUImpl`, `MemoryImpl` und `PeripheralImpl` erben von `PurchasedComponent` und `getPrice` sowie der Konstruktor wurden angepasst.",
@@ -106,7 +96,7 @@ public class H05_RubricProvider implements RubricProvider {
                     criterion("Objektattribute `peripherals` und `memories` sind korrekt.",
                         JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testMemoryAndPeripheralFields"))),
                     criterion("Methode `addCPU` funktioniert korrekt.",
-                        JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testAddCpu", boolean.class, boolean.class, Socket.class, Socket.class))),
+                        JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testAddCpu", boolean.class, boolean.class, String.class, String.class))),
                     criterion("Methode `addMemory` und `addPeripheral` funktionieren korrekt.",
                         JUnitTestRef.and(
                             JUnitTestRef.ofMethod(() -> H2.class.getDeclaredMethod("testAddMemory", int.class, List.class)),
@@ -126,12 +116,12 @@ public class H05_RubricProvider implements RubricProvider {
                     Criterion.builder()
                         .shortDescription("H3.2 | Interface `Configuration`")
                         .addChildCriteria(
-                            criterion("Interface `Configuration` korrekt defininiert.",
+                            criterion("Interface `Configuration` korrekt definiert.",
                                 JUnitTestRef.ofMethod(() -> H3_2.class.getDeclaredMethod("testConfigurationInterface"))),
                             criterion("Klasse `MainboardImpl` verwendet das Interface `Configuration` korrekt.",
                                 JUnitTestRef.ofMethod(() -> H3_2.class.getDeclaredMethod("testMainboardImplAdjustment"))),
                             criterion("Methode `rateBy` korrekt implementiert.",
-                                JUnitTestRef.ofMethod(() -> H3_2.class.getDeclaredMethod("testMainboardImplRateBy", CPU.class, Memory[].class, Peripheral[].class)))
+                                JUnitTestRef.ofMethod(() -> H3_2.class.getDeclaredMethod("testMainboardImplRateBy", Object.class, Object[].class, Object[].class)))
                         ).build(),
                     Criterion.builder()
                         .shortDescription("H3.3 | Verschiedene Implementierungen")

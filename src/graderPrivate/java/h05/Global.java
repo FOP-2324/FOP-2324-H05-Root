@@ -96,4 +96,22 @@ public class Global {
             }
         };
     }
+
+    public static Object socketMapping(String constName) {
+        try {
+            return H5Links.SOCKET_LINK.get().reflection().getDeclaredField(constName).get(null);
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Object peripheralTypeMapping(String constName) {
+        try {
+            return H5Links.PERIPHERAL_TYPE_LINK.get().reflection().getDeclaredField(constName).get(null);
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

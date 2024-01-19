@@ -3,7 +3,6 @@ package h05.h1;
 import h05.H5Links;
 import h05.H5Utils;
 import h05.Unchecked;
-import h05.model.Socket;
 import org.junit.jupiter.api.Test;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
@@ -14,6 +13,7 @@ import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.Modifier;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 
+import static h05.Global.socketMapping;
 import static h05.H5Utils.toStringifiable;
 
 @TestForSubmission
@@ -67,7 +67,7 @@ public class H1_3 {
         );
 
         var instance = Assertions2.callObject(
-            () -> constructor.invoke(Socket.AM4, 1, 2.5D, 3.5D),
+            () -> constructor.invoke(socketMapping("AM4"), 1, 2.5D, 3.5D),
             Assertions2.emptyContext(),
             (r) -> {
                 r.cause().printStackTrace();
@@ -76,7 +76,7 @@ public class H1_3 {
         );
 
         Assertions2.assertEquals(
-            Socket.AM4,
+            socketMapping("AM4"),
             H5Links.CPU_IMPL_SOCKET_FIELD_LINK.get().get(instance),
             Assertions2.emptyContext(),
             (r) -> "Constructor `CPUImpl(Socket, int, double, double)` did not set the `socket` field correctly."
@@ -141,12 +141,12 @@ public class H1_3 {
             (r) -> "Could not instantiate class `CPUImpl`."
         );
 
-        H5Links.CPU_IMPL_SOCKET_FIELD_LINK.get().set(instance, Socket.AM4);
+        H5Links.CPU_IMPL_SOCKET_FIELD_LINK.get().set(instance, socketMapping("AM4"));
         H5Links.CPU_IMPL_NUM_OF_CORES_FIELD_LINK.get().set(instance, 1);
         H5Links.CPU_IMPL_FREQUENCY_FIELD_LINK.get().set(instance, 2.5D);
 
         Assertions2.assertEquals(
-            Socket.AM4,
+            socketMapping("AM4"),
             Assertions2.callObject(
                 Unchecked.uncheckedObjectCallable(() -> getSocket.invoke(instance)),
                 Assertions2.emptyContext(),

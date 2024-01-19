@@ -1,21 +1,24 @@
 package h05.h4;
 
-import h05.ComponentRater;
 import h05.H5Links;
 import h05.H5Utils;
-import h05.ServerCenter;
 import h05.Unchecked;
-import h05.model.Mainboard;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
+import org.tudalgo.algoutils.tutor.general.match.Matcher;
 import org.tudalgo.algoutils.tutor.general.reflections.BasicTypeLink;
 import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 import org.tudalgo.algoutils.tutor.general.reflections.Modifier;
 import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.IntStream;
+
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
 
 @TestForSubmission
 public class H4_3 {
@@ -30,7 +33,7 @@ public class H4_3 {
     }
 
     @Test
-    public void testAddMainboardAndRateBy() {
+    public void testAddMainboardAndRateBy() throws Throwable {
         MethodLink addMainboard = H5Links.SERVER_CENTER_ADD_MAINBOARD_METHOD_LINK.get();
         MethodLink rateBy = H5Links.CONFIGURATION_RATE_BY_METHOD_LINK.get();
 
@@ -41,42 +44,46 @@ public class H4_3 {
             Modifier.PUBLIC
         );
 
+        Map<Object, Integer> rateByInvocations = new HashMap<>();
         var mainboards = IntStream.range(0, 10000)
-            .mapToObj(i -> {
-                Mainboard mainboard = Mockito.mock(Mainboard.class);
-                Mockito.doNothing().when(mainboard).rateBy(Mockito.any());
-                return mainboard;
-            })
+            .mapToObj(i -> Mockito.mock(H5Links.MAINBOARD_LINK.get().reflection(), (Answer<?>) invocationOnMock -> {
+                if (invocationOnMock.getMethod().equals(H5Links.CONFIGURATION_RATE_BY_METHOD_LINK.get().reflection())) {
+                    rateByInvocations.compute(invocationOnMock.getMock(), (key, value) -> value != null ? value + 1 : 1);
+                }
+                return Mockito.RETURNS_DEFAULTS.answer(invocationOnMock);
+            }))
             .toList();
 
-        var raterInstance = Mockito.mock(ComponentRater.class);
-        var instance = new ServerCenter();
+        var raterInstance = Mockito.mock(H5Links.COMPONENT_RATER_LINK.get().reflection());
+        var instance = H5Links.SERVER_CENTER_LINK.get()
+            .getConstructor(Matcher.of(constructorLink -> constructorLink.typeList().isEmpty()))
+            .invoke();
 
-        Assertions2.call(
+        call(
             Unchecked.uncheckedCallable(() -> {
-                for (Mainboard mainboard : mainboards) {
+                for (Object mainboard : mainboards) {
                     addMainboard.invoke(instance, mainboard);
                 }
             }),
-            Assertions2.emptyContext(),
+            emptyContext(),
             (r) -> {
                 r.cause().printStackTrace();
                 return "Method `addMainboard(Mainboard)` threw an exception.";
             }
         );
 
-        Assertions2.call(
+        call(
             Unchecked.uncheckedCallable(() -> rateBy.invoke(instance, raterInstance)),
-            Assertions2.emptyContext(),
+            emptyContext(),
             (r) -> {
                 r.cause().printStackTrace();
                 return "Method `rateBy(ComponentRater)` threw an exception.";
             }
         );
 
-        for (Mainboard mainboard : mainboards) {
-            Mockito.verify(mainboard, Mockito.times(1)).rateBy(raterInstance);
-            Mockito.verifyNoMoreInteractions(mainboard);
+        for (Object mainboard : mainboards) {
+            assertEquals(1, rateByInvocations.get(mainboard), emptyContext(),
+                result -> "`Mainboard.rateBy(int)` was not invoked exactly once");
         }
     }
 }
