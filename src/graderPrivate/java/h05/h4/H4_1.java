@@ -6,12 +6,13 @@ import h05.Unchecked;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.LenientCopyTool;
+import org.opentest4j.AssertionFailedError;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.student.test.StudentTestResult;
 import org.tudalgo.algoutils.student.test.StudentTestState;
 import org.tudalgo.algoutils.student.test.StudentTestUtils;
-import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.reflections.MethodLink;
 
 import java.util.HashMap;
@@ -21,13 +22,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static h05.Global.peripheralTypeMapping;
 import static h05.Global.socketMapping;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.*;
-import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertTrue;
 
 @TestForSubmission
 public class H4_1 {
 
     @Test
-    public void testConfigurationCorrect() {
+    public void testConfigurationCorrect() throws Throwable {
         MethodLink main = H5Links.MAIN_MAIN_METHOD_LINK.get();
 
         Map<String, Boolean> calledMethod = new HashMap<>() {{
@@ -139,10 +139,10 @@ public class H4_1 {
                     );
 
                     double arg3 = (double) context.arguments().get(2);
-                    if (arg3 != 3.3e9 && arg3 != 3.3e6) {
+                    if (arg3 != 3.3e9 && arg3 != 3.3e6 && arg3 != 3.3e3 && arg3 != 3.3) {
                         fail(
                             emptyContext(),
-                            (r) -> "`CPUImpl` should be instantiated with `3.3e9` or `3.3e6` as the third argument."
+                            (r) -> "`CPUImpl` should be instantiated with `3.3e9`, `3.3e6`, `3.3e3` or `3.3` as the third argument."
                         );
                     }
 
@@ -235,14 +235,22 @@ public class H4_1 {
                         (r) -> "`PeripheralImpl` should be instantiated with `300.0` as the second argument."
                     );
                 })) {
-            call(
-                Unchecked.uncheckedCallable(() -> main.invokeStatic(new Object[]{new String[0]})),
-                emptyContext(),
-                (r) -> {
-                    r.cause().printStackTrace();
-                    return "Method `main` threw an exception.";
+            try {
+                call(
+                    () -> main.invokeStatic(new Object[]{new String[0]}),
+                    emptyContext(),
+                    (r) -> {
+                        r.cause().printStackTrace();
+                        return "Method `main` threw an exception.";
+                    }
+                );
+            } catch (AssertionFailedError e) {
+                if (e.getCause() instanceof MockitoException) {
+                    throw e.getCause().getCause();
+                } else {
+                    throw e;
                 }
-            );
+            }
 
             assertEquals(
                 1,

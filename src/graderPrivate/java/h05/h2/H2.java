@@ -276,7 +276,7 @@ public class H2 {
                 }
             );
 
-            boolean expectedResult = memory != null && nonNullCount < memorySlots;
+            boolean expectedResult = nonNullCount < memorySlots;
             Assertions2.assertEquals(
                 expectedResult,
                 result,
@@ -293,9 +293,7 @@ public class H2 {
                 );
             }
 
-            if (memory != null) {
-                nonNullCount++;
-            }
+            nonNullCount++;
         }
     }
 
@@ -305,10 +303,9 @@ public class H2 {
             for (int memoryInstance = 0; memoryInstance < memorySlots + 2; memoryInstance++) {
                 arguments.add(Arguments.of(
                     memorySlots,
-                    Stream.concat(
-                        Stream.of((Object) null),
-                        IntStream.range(0, memoryInstance).mapToObj(i -> Mockito.mock(H5Links.MEMORY_LINK.get().reflection()))
-                    ).toList()
+                    IntStream.rangeClosed(0, memoryInstance)
+                        .mapToObj(i -> Mockito.mock(H5Links.MEMORY_LINK.get().reflection()))
+                        .toList()
                 ));
             }
         }
@@ -366,7 +363,7 @@ public class H2 {
                 }
             );
 
-            boolean expectedResult = peripheral != null && nonNullCount < peripheralSlots;
+            boolean expectedResult = nonNullCount < peripheralSlots;
             Assertions2.assertEquals(
                 expectedResult,
                 result,
@@ -383,9 +380,7 @@ public class H2 {
                 );
             }
 
-            if (peripheral != null) {
-                nonNullCount++;
-            }
+            nonNullCount++;
         }
     }
 
@@ -395,10 +390,9 @@ public class H2 {
             for (int peripheralInstance = 0; peripheralInstance < peripheralSlots + 2; peripheralInstance++) {
                 arguments.add(Arguments.of(
                     peripheralSlots,
-                    Stream.concat(
-                        Stream.of((Object) null),
-                        IntStream.range(0, peripheralInstance).mapToObj(i -> Mockito.mock(H5Links.PERIPHERAL_LINK.get().reflection()))
-                    ).toList()
+                    IntStream.rangeClosed(0, peripheralInstance)
+                        .mapToObj(i -> Mockito.mock(H5Links.PERIPHERAL_LINK.get().reflection()))
+                        .toList()
                 ));
             }
         }
