@@ -20,6 +20,9 @@ import org.tudalgo.algoutils.tutor.general.reflections.TypeLink;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 import static h05.Global.peripheralTypeMapping;
@@ -206,9 +209,13 @@ public class H3_3 {
         );
 
         double totalMemorySize = memorySizes.stream().mapToInt(i -> i).sum();
-        double expected1 = totalMemorySize / modelSize * (100 - (100 - 1) * Math.pow(1.02, tpuCount));
-        double expected2 = totalMemorySize / modelSize * (100 - (100 - 1) * Math.pow(1.02, -tpuCount));
-        if (result == expected1 || result == expected2)
+        Set<Double> expectedValues = DoubleStream.of(tpuCount, -tpuCount)
+            .flatMap(d -> DoubleStream.of(
+                totalMemorySize / modelSize * (100 - (100 - 1) * Math.pow(1.02, d)),
+                totalMemorySize / modelSize * (100 * (100 - 1) * Math.pow(1.02, d))))
+            .boxed()
+            .collect(Collectors.toSet());
+        if (expectedValues.contains(result))
             return;
 
         Assertions2.fail(

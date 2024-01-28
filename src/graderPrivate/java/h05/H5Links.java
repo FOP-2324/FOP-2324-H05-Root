@@ -1,378 +1,191 @@
 package h05;
 
 import com.google.common.base.Suppliers;
-import org.tudalgo.algoutils.tutor.general.match.BasicReflectionMatchers;
+import org.tudalgo.algoutils.tutor.general.match.Matcher;
 import org.tudalgo.algoutils.tutor.general.reflections.*;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static h05.Global.similarityMatcher;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertNotNull;
 import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.emptyContext;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions3.*;
 
+@SuppressWarnings("unchecked")
 public class H5Links {
 
-    public static final Supplier<PackageLink> H05_PACKAGE_LINK = new PackageLinkSupplier("h05");
-    public static final Supplier<PackageLink> MODEL_PACKAGE_LINK = new PackageLinkSupplier("h05.model");
+    // Make the classloader load package h05.model (or misspellings) if used in class
+    private static final Object JANK_DO_NOT_TOUCH = new Main();
+
+    public static final Supplier<PackageLink> PACKAGES_LINK = Suppliers.memoize(() ->
+        new CombinedPackageLink(Stream.concat(
+                Stream.of("h05", "h05.model"),
+                Arrays.stream(Package.getPackages())
+                    .map(Package::getName)
+                    .filter(s -> s.startsWith("h05") && !s.matches("h05\\.h[1-4]")))
+            .distinct()
+            .map(BasicPackageLink::of)
+            .toList()));
+
+    private static Supplier<BasicTypeLink> typeLinkSup(String name) {
+        return Suppliers.memoize(() -> (BasicTypeLink) assertTypeExists(
+            PACKAGES_LINK.get(),
+            similarityMatcher(name)
+        ));
+    }
+
+    private static Supplier<BasicMethodLink> methodLinkSup(Supplier<? extends TypeLink> tl, String name) {
+        return Suppliers.memoize(() -> (BasicMethodLink) assertMethodExists(
+            tl.get(),
+            similarityMatcher(name)
+        ));
+    }
+
+    private static Supplier<BasicFieldLink> fieldLinkSup(Supplier<? extends TypeLink> tl, Matcher<FieldLink> matcher) {
+        return Suppliers.memoize(() -> (BasicFieldLink) assertFieldExists(
+            tl.get(),
+            matcher
+        ));
+    }
+
+    private static Supplier<BasicFieldLink> fieldLinkSup(Supplier<? extends TypeLink> tl, String name) {
+        return fieldLinkSup(tl, similarityMatcher(name));
+    }
+
+    public static Supplier<BasicConstructorLink> constructorLinkSup(Supplier<? extends TypeLink> tl, Supplier<? extends TypeLink>... args) {
+        return Suppliers.memoize(() -> (BasicConstructorLink) assertConstructorExists(
+            tl.get(),
+            sameTypes(args)
+        ));
+    }
+
+    public static <T extends WithTypeList> Matcher<T> sameTypes(Supplier<? extends TypeLink>... types) {
+        try {
+            List<? extends TypeLink> parameterList = Arrays.stream(types).map(Supplier::get).toList();
+            return Matcher.of((l) -> l.typeList().equals(parameterList),
+                String.format("Same parameter types: %s", parameterList.stream().map(TypeLink::name).toList()));
+        } catch (Throwable t) {
+            return Matcher.never();
+        }
+    }
 
     // Interface Component
-    public static final Supplier<TypeLink> COMPONENT_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("Component")),
-        emptyContext(),
-        (r) -> "Interface `Component` does not exist."
-    ));
-    public static final Supplier<MethodLink> COMPONENT_GET_PRICE_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        COMPONENT_LINK.get().getMethod(similarityMatcher("getPrice")),
-        emptyContext(),
-        (r) -> "Method `getPrice` not found in interface `Component`."
-    ));
+    public static final Supplier<BasicTypeLink> COMPONENT_LINK = typeLinkSup("Component");
+    public static final Supplier<BasicMethodLink> COMPONENT_GET_PRICE_METHOD_LINK = methodLinkSup(COMPONENT_LINK, "getPrice");
 
     // Enum Socket
-    public static final Supplier<TypeLink> SOCKET_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("Socket")),
-        emptyContext(),
-        (r) -> "Enum `Socket` does not exist."
-    ));
+    public static final Supplier<BasicTypeLink> SOCKET_LINK = typeLinkSup("Socket");
 
     // Enum PeripheralType
-    public static final Supplier<TypeLink> PERIPHERAL_TYPE_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("PeripheralType")),
-        emptyContext(),
-        (r) -> "Enum `PeripheralType` does not exist."
-    ));
+    public static final Supplier<BasicTypeLink> PERIPHERAL_TYPE_LINK = typeLinkSup("PeripheralType");
 
     // Interface CPU
-    public static final Supplier<TypeLink> CPU_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("CPU")),
-        emptyContext(),
-        (r) -> "Interface `CPU` does not exist."
-    ));
-    public static final Supplier<MethodLink> CPU_GET_SOCKET_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        CPU_LINK.get().getMethod(similarityMatcher("getSocket")),
-        emptyContext(),
-        (r) -> "Method `getSocket` not found in interface `CPU`."
-    ));
+    public static final Supplier<BasicTypeLink> CPU_LINK = typeLinkSup("CPU");
+    public static final Supplier<BasicMethodLink> CPU_GET_SOCKET_METHOD_LINK = methodLinkSup(CPU_LINK, "getSocket");
     public static final Supplier<MethodLink> CPU_GET_CORES_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
         CPU_LINK.get().getMethod(similarityMatcher("getCores").or(similarityMatcher("getNumberOfCores"))),
         emptyContext(),
         (r) -> "Method `getCores/getNumberOfCores` not found in interface `CPU`."
     ));
-    public static final Supplier<MethodLink> CPU_GET_FREQUENCY_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        CPU_LINK.get().getMethod(similarityMatcher("getFrequency")),
-        emptyContext(),
-        (r) -> "Method `getFrequency` not found in interface `CPU`."
-    ));
+    public static final Supplier<BasicMethodLink> CPU_GET_FREQUENCY_METHOD_LINK = methodLinkSup(CPU_LINK, "getFrequency");
 
     // Class CPUImpl
-    public static final Supplier<TypeLink> CPU_IMPL_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("CPUImpl")),
-        emptyContext(),
-        (r) -> "Class `CPUImpl` does not exist."
-    ));
-    public static final Supplier<ConstructorLink> CPU_IMPL_CONSTRUCTOR_LINK = Suppliers.memoize(() -> assertNotNull(
-        CPU_IMPL_LINK.get().getConstructor(BasicReflectionMatchers.sameTypes(
-            SOCKET_LINK.get(),
-            BasicTypeLink.of(int.class),
-            BasicTypeLink.of(double.class),
-            BasicTypeLink.of(double.class)
-        )),
-        emptyContext(),
-        (r) -> "Constructor `CPUImpl(Socket, int, double, double)` not found in class `CPUImpl`."
-    ));
-    public static final Supplier<FieldLink> CPU_IMPL_SOCKET_FIELD_LINK = Suppliers.memoize(() -> assertNotNull(
-        CPU_IMPL_LINK.get().getField(similarityMatcher("socket")),
-        emptyContext(),
-        (r) -> "Field `socket` not found in class `CPUImpl`."
-    ));
-    public static final Supplier<FieldLink> CPU_IMPL_NUM_OF_CORES_FIELD_LINK = Suppliers.memoize(() -> assertNotNull(
-        CPU_IMPL_LINK.get().getField(similarityMatcher("numOfCores")),
-        emptyContext(),
-        (r) -> "Field `cores` not found in class `CPUImpl`."
-    ));
-    public static final Supplier<FieldLink> CPU_IMPL_FREQUENCY_FIELD_LINK = Suppliers.memoize(() -> assertNotNull(
-        CPU_IMPL_LINK.get().getField(similarityMatcher("frequency")),
-        emptyContext(),
-        (r) -> "Field `frequency` not found in class `CPUImpl`."
-    ));
+    public static final Supplier<BasicTypeLink> CPU_IMPL_LINK = typeLinkSup("CPUImpl");
+    public static final Supplier<BasicConstructorLink> CPU_IMPL_CONSTRUCTOR_LINK = constructorLinkSup(CPU_IMPL_LINK,
+        SOCKET_LINK,
+        () -> BasicTypeLink.of(int.class),
+        () -> BasicTypeLink.of(double.class),
+        () -> BasicTypeLink.of(double.class)
+    );
+    public static final Supplier<BasicFieldLink> CPU_IMPL_SOCKET_FIELD_LINK = fieldLinkSup(CPU_IMPL_LINK, "socket");
+    public static final Supplier<BasicFieldLink> CPU_IMPL_NUM_OF_CORES_FIELD_LINK = fieldLinkSup(CPU_IMPL_LINK, "numOfCores");
+    public static final Supplier<BasicFieldLink> CPU_IMPL_FREQUENCY_FIELD_LINK = fieldLinkSup(CPU_IMPL_LINK, "frequency");
 
     // Interface Memory
-    public static final Supplier<TypeLink> MEMORY_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("Memory")),
-        emptyContext(),
-        (r) -> "Interface `Memory` does not exist."
-    ));
-    public static final Supplier<MethodLink> MEMORY_GET_CAPACITY_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MEMORY_LINK.get().getMethod(similarityMatcher("getCapacity")),
-        emptyContext(),
-        (r) -> "Method `getCapacity` not found in interface `Memory`."
-    ));
+    public static final Supplier<BasicTypeLink> MEMORY_LINK = typeLinkSup("Memory");
+    public static final Supplier<BasicMethodLink> MEMORY_GET_CAPACITY_METHOD_LINK = methodLinkSup(MEMORY_LINK, "getCapacity");
 
     // Class MemoryImpl
-    public static final Supplier<TypeLink> MEMORY_IMPL_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("MemoryImpl")),
-        emptyContext(),
-        (r) -> "Class `MemoryImpl` does not exist."
-    ));
-    public static final Supplier<ConstructorLink> MEMORY_IMPL_CONSTRUCTOR_LINK = Suppliers.memoize(() -> assertNotNull(
-        MEMORY_IMPL_LINK.get().getConstructor(BasicReflectionMatchers.sameTypes(
-            BasicTypeLink.of(char.class),
-            BasicTypeLink.of(double.class)
-        )),
-        emptyContext(),
-        (r) -> "Constructor `MemoryImpl(char, double)` not found in class `MemoryImpl`."
-    ));
-    public static final Supplier<FieldLink> MEMORY_IMPL_CAPACITY_FIELD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MEMORY_IMPL_LINK.get().getField(similarityMatcher("capacity")),
-        emptyContext(),
-        (r) -> "Field `capacity` not found in class `MemoryImpl`."
-    ));
+    public static final Supplier<BasicTypeLink> MEMORY_IMPL_LINK = typeLinkSup("MemoryImpl");
+    public static final Supplier<BasicConstructorLink> MEMORY_IMPL_CONSTRUCTOR_LINK = constructorLinkSup(MEMORY_IMPL_LINK,
+        () -> BasicTypeLink.of(char.class),
+        () -> BasicTypeLink.of(double.class)
+    );
+    public static final Supplier<BasicFieldLink> MEMORY_IMPL_CAPACITY_FIELD_LINK = fieldLinkSup(MEMORY_IMPL_LINK, "capacity");
 
     // Interface Peripheral
-    public static final Supplier<TypeLink> PERIPHERAL_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("Peripheral")),
-        emptyContext(),
-        (r) -> "Interface `Peripheral` does not exist."
-    ));
-    public static final Supplier<MethodLink> PERIPHERAL_GET_PERIPHERAL_TYPE_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        PERIPHERAL_LINK.get().getMethod(similarityMatcher("getPeripheralType")),
-        emptyContext(),
-        (r) -> "Method `getPeripheralType` not found in interface `Peripheral`."
-    ));
+    public static final Supplier<BasicTypeLink> PERIPHERAL_LINK = typeLinkSup("Peripheral");
+    public static final Supplier<BasicMethodLink> PERIPHERAL_GET_PERIPHERAL_TYPE_METHOD_LINK = methodLinkSup(PERIPHERAL_LINK, "getPeripheralType");
 
     // Class PeripheralImpl
-    public static final Supplier<TypeLink> PERIPHERAL_IMPL_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("PeripheralImpl")),
-        emptyContext(),
-        (r) -> "Class `PeripheralImpl` does not exist."
-    ));
-    public static final Supplier<ConstructorLink> PERIPHERAL_IMPL_CONSTRUCTOR_LINK = Suppliers.memoize(() -> assertNotNull(
-        PERIPHERAL_IMPL_LINK.get().getConstructor(BasicReflectionMatchers.sameTypes(
-            PERIPHERAL_TYPE_LINK.get(),
-            BasicTypeLink.of(double.class)
-        )),
-        emptyContext(),
-        (r) -> "Constructor `PeripheralImpl(PeripheralType, double)` not found in class `PeripheralImpl`."
-    ));
-    public static final Supplier<FieldLink> PERIPHERAL_IMPL_PERIPHERAL_TYPE_FIELD_LINK = Suppliers.memoize(() -> assertNotNull(
-        PERIPHERAL_IMPL_LINK.get().getField(similarityMatcher("peripheralType")),
-        emptyContext(),
-        (r) -> "Field `peripheralType` not found in class `PeripheralImpl`."
-    ));
+    public static final Supplier<BasicTypeLink> PERIPHERAL_IMPL_LINK = typeLinkSup("PeripheralImpl");
+    public static final Supplier<BasicConstructorLink> PERIPHERAL_IMPL_CONSTRUCTOR_LINK = constructorLinkSup(PERIPHERAL_IMPL_LINK,
+        PERIPHERAL_TYPE_LINK,
+        () -> BasicTypeLink.of(double.class)
+    );
+    public static final Supplier<BasicFieldLink> PERIPHERAL_IMPL_PERIPHERAL_TYPE_FIELD_LINK = fieldLinkSup(PERIPHERAL_IMPL_LINK, "peripheralType");
 
     // Class PurchasedComponent
-    public static final Supplier<TypeLink> PURCHASED_COMPONENT_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("PurchasedComponent")),
-        emptyContext(),
-        (r) -> "Class `PurchasedComponent` does not exist."
-    ));
-    public static final Supplier<ConstructorLink> PURCHASED_COMPONENT_CONSTRUCTOR_LINK = Suppliers.memoize(() -> assertNotNull(
-        PURCHASED_COMPONENT_LINK.get().getConstructor(BasicReflectionMatchers.sameTypes(
-            BasicTypeLink.of(double.class)
-        )),
-        emptyContext(),
-        (r) -> "Constructor `PurchasedComponent(double)` not found in class `PurchasedComponent`."
-    ));
-    public static final Supplier<FieldLink> PURCHASED_COMPONENT_PRICE_FIELD_LINK = Suppliers.memoize(() -> assertNotNull(
-        PURCHASED_COMPONENT_LINK.get().getField(similarityMatcher("price")),
-        emptyContext(),
-        (r) -> "Field `price` not found in class `PurchasedComponent`."
-    ));
-    public static final Supplier<MethodLink> PURCHASED_COMPONENT_GET_PRICE_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        PURCHASED_COMPONENT_LINK.get().getMethod(similarityMatcher("getPrice")),
-        emptyContext(),
-        (r) -> "Method `getPrice` not found in class `PurchasedComponent`."
-    ));
+    public static final Supplier<BasicTypeLink> PURCHASED_COMPONENT_LINK = typeLinkSup("PurchasedComponent");
+    public static final Supplier<BasicConstructorLink> PURCHASED_COMPONENT_CONSTRUCTOR_LINK = constructorLinkSup(PURCHASED_COMPONENT_LINK,
+        () -> BasicTypeLink.of(double.class)
+    );
+    public static final Supplier<BasicFieldLink> PURCHASED_COMPONENT_PRICE_FIELD_LINK = fieldLinkSup(PURCHASED_COMPONENT_LINK, "price");
+    public static final Supplier<BasicMethodLink> PURCHASED_COMPONENT_GET_PRICE_METHOD_LINK = methodLinkSup(PURCHASED_COMPONENT_LINK, "getPrice");
 
     // Interface Mainboard
-    public static final Supplier<TypeLink> MAINBOARD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("Mainboard")),
-        emptyContext(),
-        (r) -> "Interface `Mainboard` does not exist."
-    ));
+    public static final Supplier<BasicTypeLink> MAINBOARD_LINK = typeLinkSup("Mainboard");
 
     // Class MainboardImpl
-    public static final Supplier<TypeLink> MAINBOARD_IMPL_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("MainboardImpl")),
-        emptyContext(),
-        (r) -> "Class `MainboardImpl` does not exist."
-    ));
-    public static final Supplier<ConstructorLink> MAINBOARD_IMPL_CONSTRUCTOR_LINK = Suppliers.memoize(() -> assertNotNull(
-        MAINBOARD_IMPL_LINK.get().getConstructor(BasicReflectionMatchers.sameTypes(
-            SOCKET_LINK.get(),
-            BasicTypeLink.of(int.class),
-            BasicTypeLink.of(int.class),
-            BasicTypeLink.of(double.class)
-        )),
-        emptyContext(),
-        (r) -> "Constructor `MainboardImpl(Socket, int, int, double)` not found in class `MainboardImpl`."
-    ));
-    public static final Supplier<FieldLink> MAINBOARD_IMPL_CPU_FIELD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MAINBOARD_IMPL_LINK.get().getField(similarityMatcher("cpu")),
-        emptyContext(),
-        (r) -> "Field `cpu` not found in class `MainboardImpl`."
-    ));
-    public static final Supplier<FieldLink> MAINBOARD_IMPL_MEMORIES_FIELD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MAINBOARD_IMPL_LINK.get().getField(similarityMatcher("memories")),
-        emptyContext(),
-        (r) -> "Field `memories` not found in class `MainboardImpl`."
-    ));
-    public static final Supplier<FieldLink> MAINBOARD_IMPL_PERIPHERALS_FIELD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MAINBOARD_IMPL_LINK.get().getField(similarityMatcher("peripherals")),
-        emptyContext(),
-        (r) -> "Field `peripherals` not found in class `MainboardImpl`."
-    ));
-    public static final Supplier<MethodLink> MAINBOARD_IMPL_ADD_CPU_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MAINBOARD_IMPL_LINK.get().getMethod(similarityMatcher("addCPU")),
-        emptyContext(),
-        (r) -> "Method `addCPU` not found in class `MainboardImpl`."
-    ));
-    public static final Supplier<MethodLink> MAINBOARD_IMPL_ADD_MEMORY_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MAINBOARD_IMPL_LINK.get().getMethod(similarityMatcher("addMemory")),
-        emptyContext(),
-        (r) -> "Method `addMemory` not found in class `MainboardImpl`."
-    ));
-    public static final Supplier<MethodLink> MAINBOARD_IMPL_ADD_PERIPHERAL_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MAINBOARD_IMPL_LINK.get().getMethod(similarityMatcher("addPeripheral")),
-        emptyContext(),
-        (r) -> "Method `addPeripheral` not found in class `MainboardImpl`."
-    ));
-    public static final Supplier<MethodLink> MAINBOARD_IMPL_RATE_BY_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MAINBOARD_IMPL_LINK.get().getMethod(similarityMatcher("rateBy")),
-        emptyContext(),
-        (r) -> "Method `rateBy` not found in class `MainboardImpl`."
-    ));
+    public static final Supplier<BasicTypeLink> MAINBOARD_IMPL_LINK = typeLinkSup("MainboardImpl");
+    public static final Supplier<BasicConstructorLink> MAINBOARD_IMPL_CONSTRUCTOR_LINK = constructorLinkSup(MAINBOARD_IMPL_LINK,
+        SOCKET_LINK,
+        () -> BasicTypeLink.of(int.class),
+        () -> BasicTypeLink.of(int.class),
+        () -> BasicTypeLink.of(double.class)
+    );
+    public static final Supplier<BasicFieldLink> MAINBOARD_IMPL_CPU_FIELD_LINK = fieldLinkSup(MAINBOARD_IMPL_LINK, "cpu");
+    public static final Supplier<BasicFieldLink> MAINBOARD_IMPL_MEMORIES_FIELD_LINK = fieldLinkSup(MAINBOARD_IMPL_LINK, "memories");
+    public static final Supplier<BasicFieldLink> MAINBOARD_IMPL_PERIPHERALS_FIELD_LINK = fieldLinkSup(MAINBOARD_IMPL_LINK, "peripherals");
+    public static final Supplier<BasicMethodLink> MAINBOARD_IMPL_ADD_CPU_METHOD_LINK = methodLinkSup(MAINBOARD_IMPL_LINK, "addCPU");
+    public static final Supplier<BasicMethodLink> MAINBOARD_IMPL_ADD_MEMORY_METHOD_LINK = methodLinkSup(MAINBOARD_IMPL_LINK, "addMemory");
+    public static final Supplier<BasicMethodLink> MAINBOARD_IMPL_ADD_PERIPHERAL_METHOD_LINK = methodLinkSup(MAINBOARD_IMPL_LINK, "addPeripheral");
+    public static final Supplier<BasicMethodLink> MAINBOARD_IMPL_RATE_BY_METHOD_LINK = methodLinkSup(MAINBOARD_IMPL_LINK, "rateBy");
 
     // Interface ComponentRater
-    public static final Supplier<TypeLink> COMPONENT_RATER_LINK = Suppliers.memoize(() -> assertNotNull(
-        H05_PACKAGE_LINK.get().getType(similarityMatcher("ComponentRater")),
-        emptyContext(),
-        (r) -> "Interface `ComponentRater` does not exist."
-    ));
-    public static final Supplier<MethodLink> COMPONENT_RATER_CONSUME_MAINBOARD_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        COMPONENT_RATER_LINK.get().getMethod(similarityMatcher("consumeMainboard")),
-        emptyContext(),
-        (r) -> "Method `consumeMainboard` not found in interface `ComponentRater`."
-    ));
-    public static final Supplier<MethodLink> COMPONENT_RATER_CONSUME_CPU_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        COMPONENT_RATER_LINK.get().getMethod(similarityMatcher("consumeCPU")),
-        emptyContext(),
-        (r) -> "Method `consumeCPU` not found in interface `ComponentRater`."
-    ));
-    public static final Supplier<MethodLink> COMPONENT_RATER_CONSUME_MEMORY_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        COMPONENT_RATER_LINK.get().getMethod(similarityMatcher("consumeMemory")),
-        emptyContext(),
-        (r) -> "Method `consumeMemory` not found in interface `ComponentRater`."
-    ));
-    public static final Supplier<MethodLink> COMPONENT_RATER_CONSUME_PERIPHERAL_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        COMPONENT_RATER_LINK.get().getMethod(similarityMatcher("consumePeripheral")),
-        emptyContext(),
-        (r) -> "Method `consumePeripheral` not found in interface `ComponentRater`."
-    ));
+    public static final Supplier<BasicTypeLink> COMPONENT_RATER_LINK = typeLinkSup("ComponentRater");
+    public static final Supplier<BasicMethodLink> COMPONENT_RATER_CONSUME_MAINBOARD_METHOD_LINK = methodLinkSup(COMPONENT_RATER_LINK, "consumeMainboard");
+    public static final Supplier<BasicMethodLink> COMPONENT_RATER_CONSUME_CPU_METHOD_LINK = methodLinkSup(COMPONENT_RATER_LINK, "consumeCPU");
+    public static final Supplier<BasicMethodLink> COMPONENT_RATER_CONSUME_MEMORY_METHOD_LINK = methodLinkSup(COMPONENT_RATER_LINK, "consumeMemory");
+    public static final Supplier<BasicMethodLink> COMPONENT_RATER_CONSUME_PERIPHERAL_METHOD_LINK = methodLinkSup(COMPONENT_RATER_LINK, "consumePeripheral");
 
     // Interface Configuration
-    public static final Supplier<TypeLink> CONFIGURATION_LINK = Suppliers.memoize(() -> assertNotNull(
-        H05_PACKAGE_LINK.get().getType(similarityMatcher("Configuration")),
-        emptyContext(),
-        (r) -> "Interface `Configuration` does not exist."
-    ));
-    public static final Supplier<MethodLink> CONFIGURATION_RATE_BY_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        CONFIGURATION_LINK.get().getMethod(similarityMatcher("rateBy")),
-        emptyContext(),
-        (r) -> "Method `rateBy` not found in interface `Configuration`."
-    ));
+    public static final Supplier<BasicTypeLink> CONFIGURATION_LINK = typeLinkSup("Configuration");
+    public static final Supplier<BasicMethodLink> CONFIGURATION_RATE_BY_METHOD_LINK = methodLinkSup(CONFIGURATION_LINK, "rateBy");
 
     // Class TotalCostRater
-    public static final Supplier<TypeLink> TOTAL_COST_RATER_LINK = Suppliers.memoize(() -> assertNotNull(
-        H05_PACKAGE_LINK.get().getType(similarityMatcher("TotalCostRater")),
-        emptyContext(),
-        (r) -> "Class `TotalCostRater` does not exist."
-    ));
-    public static final Supplier<MethodLink> TOTAL_COST_RATER_GET_TOTAL_PRICE_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        TOTAL_COST_RATER_LINK.get().getMethod(similarityMatcher("getTotalPrice")),
-        emptyContext(),
-        (r) -> "Method `getTotalPrice` not found in class `TotalCostRater`."
-    ));
+    public static final Supplier<BasicTypeLink> TOTAL_COST_RATER_LINK = typeLinkSup("TotalCostRater");
+    public static final Supplier<BasicMethodLink> TOTAL_COST_RATER_GET_TOTAL_PRICE_METHOD_LINK = methodLinkSup(TOTAL_COST_RATER_LINK, "getTotalPrice");
 
     // Class MachineLearningRater
-    public static final Supplier<TypeLink> MACHINE_LEARNING_RATER_LINK = Suppliers.memoize(() -> assertNotNull(
-        H05_PACKAGE_LINK.get().getType(similarityMatcher("MachineLearningRater")),
-        emptyContext(),
-        (r) -> "Class `MachineLearningRater` does not exist."
-    ));
-    public static final Supplier<MethodLink> MACHINE_LEARNING_RATER_CHECK_MODEL_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MACHINE_LEARNING_RATER_LINK.get().getMethod(similarityMatcher("checkModel")),
-        emptyContext(),
-        (r) -> "Method `checkModel` not found in class `MachineLearningRater`."
-    ));
+    public static final Supplier<BasicTypeLink> MACHINE_LEARNING_RATER_LINK = typeLinkSup("MachineLearningRater");
+    public static final Supplier<BasicMethodLink> MACHINE_LEARNING_RATER_CHECK_MODEL_METHOD_LINK = methodLinkSup(MACHINE_LEARNING_RATER_LINK, "checkModel");
 
     // Class VirtualMemory
-    public static final Supplier<TypeLink> VIRTUAL_MEMORY_LINK = Suppliers.memoize(() -> assertNotNull(
-        MODEL_PACKAGE_LINK.get().getType(similarityMatcher("VirtualMemory")),
-        emptyContext(),
-        (r) -> "Class `VirtualMemory` does not exist."
-    ));
-    public static final Supplier<ConstructorLink> VIRTUAL_MEMORY_CONSTRUCTOR_LINK = Suppliers.memoize(() -> assertNotNull(
-        VIRTUAL_MEMORY_LINK.get().getConstructor(BasicReflectionMatchers.sameTypes(
-            BasicTypeLink.of(double.class)
-        )),
-        emptyContext(),
-        (r) -> "Constructor `VirtualMemory(double)` not found in class `VirtualMemory`."
-    ));
-    public static final Supplier<MethodLink> VIRTUAL_MEMORY_SET_CAPACITY_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        VIRTUAL_MEMORY_LINK.get().getMethod(similarityMatcher("setCapacity")),
-        emptyContext(),
-        (r) -> "Method `setCapacity` not found in class `VirtualMemory`."
-    ));
+    public static final Supplier<BasicTypeLink> VIRTUAL_MEMORY_LINK = typeLinkSup("VirtualMemory");
+    public static final Supplier<BasicConstructorLink> VIRTUAL_MEMORY_CONSTRUCTOR_LINK = constructorLinkSup(VIRTUAL_MEMORY_LINK,
+        () -> BasicTypeLink.of(double.class)
+    );
+    public static final Supplier<BasicMethodLink> VIRTUAL_MEMORY_SET_CAPACITY_METHOD_LINK = methodLinkSup(VIRTUAL_MEMORY_LINK, "setCapacity");
 
     // Class ServerCenter
-    public static final Supplier<TypeLink> SERVER_CENTER_LINK = Suppliers.memoize(() -> assertNotNull(
-        H05_PACKAGE_LINK.get().getType(similarityMatcher("ServerCenter")),
-        emptyContext(),
-        (r) -> "Class `ServerCenter` does not exist."
-    ));
-    public static final Supplier<MethodLink> SERVER_CENTER_ADD_MAINBOARD_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        SERVER_CENTER_LINK.get().getMethod(similarityMatcher("addMainboard")),
-        emptyContext(),
-        (r) -> "Method `addMainboard` not found in class `ServerCenter`."
-    ));
+    public static final Supplier<BasicTypeLink> SERVER_CENTER_LINK = typeLinkSup("ServerCenter");
+    public static final Supplier<BasicMethodLink> SERVER_CENTER_ADD_MAINBOARD_METHOD_LINK = methodLinkSup(SERVER_CENTER_LINK, "addMainboard");
 
     // Class Main
-    public static final Supplier<TypeLink> MAIN_LINK = Suppliers.memoize(() -> assertNotNull(
-        H05_PACKAGE_LINK.get().getType(similarityMatcher("Main")),
-        emptyContext(),
-        (r) -> "Class `Main` does not exist."
-    ));
-    public static final Supplier<MethodLink> MAIN_MAIN_METHOD_LINK = Suppliers.memoize(() -> assertNotNull(
-        MAIN_LINK.get().getMethod(similarityMatcher("main")),
-        emptyContext(),
-        (r) -> "Method `main` not found in class `Main`."
-    ));
-
-    private static class PackageLinkSupplier implements Supplier<PackageLink> {
-
-        private final String name;
-
-        private PackageLink value = null;
-        private boolean initialized = false;
-
-        public PackageLinkSupplier(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public PackageLink get() {
-            if (!initialized) {
-                value = init();
-                initialized = true;
-            }
-
-            return value;
-        }
-
-        private PackageLink init() {
-            return BasicPackageLink.of(name);
-        }
-    }
-
-    // Interface ComponentRater
+    public static final Supplier<BasicTypeLink> MAIN_LINK = typeLinkSup("Main");
+    public static final Supplier<BasicMethodLink> MAIN_MAIN_METHOD_LINK = methodLinkSup(MAIN_LINK, "main");
 }

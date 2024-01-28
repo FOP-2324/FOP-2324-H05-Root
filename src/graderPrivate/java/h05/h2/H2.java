@@ -25,6 +25,8 @@ import java.util.stream.Stream;
 
 import static h05.Global.socketMapping;
 import static h05.H5Utils.toStringifiable;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.assertTrue;
+import static org.tudalgo.algoutils.tutor.general.assertions.Assertions2.emptyContext;
 
 @TestForSubmission
 public class H2 {
@@ -52,8 +54,10 @@ public class H2 {
         var memoriesField = H5Links.MAINBOARD_IMPL_MEMORIES_FIELD_LINK.get();
         var peripheralsField = H5Links.MAINBOARD_IMPL_PERIPHERALS_FIELD_LINK.get();
 
-        H5Utils.assertCorrectModifiers(memoriesField, Modifier.PRIVATE, Modifier.FINAL);
-        H5Utils.assertCorrectModifiers(peripheralsField, Modifier.PRIVATE, Modifier.FINAL);
+        assertTrue((memoriesField.modifiers() & java.lang.reflect.Modifier.PRIVATE) != 0, emptyContext(), result ->
+            "Field `memories` should have modifier PRIVATE, but does not");
+        assertTrue((peripheralsField.modifiers() & java.lang.reflect.Modifier.PRIVATE) != 0, emptyContext(), result ->
+            "Field `peripherals` should have modifier PRIVATE, but does not");
 
         Assertions2.assertEquals(
             toStringifiable(BasicTypeLink.of(H5Links.MEMORY_LINK.get().reflection().arrayType())),
