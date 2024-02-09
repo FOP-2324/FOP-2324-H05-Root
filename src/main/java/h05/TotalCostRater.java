@@ -33,7 +33,7 @@ public class TotalCostRater implements ComponentRater {
      *
      * @return the total cost of the system
      */
-    public double getTotalCost(){
+    public double getTotalPrice(){
         return cost;
     }
 }

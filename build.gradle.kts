@@ -25,8 +25,11 @@ jagr {
             }
         }
         val graderPrivate by creating {
-            parent(graderPublic)
             graderName.set("H05-Private")
+            rubricProviderName.set("h05.H05_RubricProvider")
+            configureDependencies {
+                implementation(libs.algoutils.tutor)
+            }
         }
     }
 }
@@ -34,6 +37,8 @@ jagr {
 dependencies {
     implementation(libs.annotations)
     implementation(libs.algoutils.student)
+    implementation(libs.fopbot)
+    testImplementation(libs.mockito.core)
     testImplementation(libs.junit.core)
 }
 
